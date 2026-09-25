@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pau Dura Pérez — Planning Manager & Data Analyst</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="preview-banner">Preview — the live site uses JetBrains Mono / Inter via Google Fonts and EmailJS; here they are replaced with system fonts and form submission is disabled</div>
+
+<!-- NAV -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a href="#home" class="logo">&lt;PauDura<span class="accent">/</span>&gt;</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home">home</a>
+      <a href="#about">about</a>
+      <a href="#projects">projects</a>
+      <a href="#experience">experience</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <p class="hero__pretitle">// welcome to my portfolio</p>
+      <h1 class="hero__title">Pau Dura Pérez</h1>
+      <p class="hero__subtitle">
+        <span class="typed" id="typedText"></span><span class="cursor">|</span>
+      </p>
+      <p class="hero__description">
+        Planning Manager &amp; Data Analyst. I turn raw data into clear decisions
+        through analysis, planning and visualisation.
+      </p>
+      <div class="hero__cta">
+        <a href="#projects" class="btn btn--primary">View projects</a>
+        <a href="#contact" class="btn btn--ghost">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="hero__terminal">
+      <div class="terminal">
+        <div class="terminal__bar">
+          <span class="dot dot--red"></span>
+          <span class="dot dot--yellow"></span>
+          <span class="dot dot--green"></span>
+          <span class="terminal__title">profile.py</span>
+        </div>
+        <pre class="terminal__body"><code><span class="tok-key">class</span> <span class="tok-class">PlanningManager</span>:
+    <span class="tok-key">def</span> <span class="tok-fn">__init__</span>(<span class="tok-var">self</span>):
+        <span class="tok-var">self</span>.name = <span class="tok-str">"Pau Dura Pérez"</span>
+        <span class="tok-var">self</span>.role = <span class="tok-str">"Planning Manager & Data Analyst"</span>
+        <span class="tok-var">self</span>.stack = [<span class="tok-str">"Python"</span>, <span class="tok-str">"SQL"</span>,
+                      <span class="tok-str">"Power BI"</span>, <span class="tok-str">"Tableau"</span>]
+        <span class="tok-var">self</span>.passion = <span class="tok-str">"data storytelling"</span>
+
+    <span class="tok-key">def</span> <span class="tok-fn">say_hello</span>(<span class="tok-var">self</span>):
+        <span class="tok-key">return</span> <span class="tok-str">"Welcome to my portfolio!"</span></code></pre>
+      </div>
+    </div>
+  </div>
+  <a href="#about" class="scroll-hint" aria-label="Scroll down">
+    <span></span>
+  </a>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="container">
+    <h2 class="section__title"><span class="tag">&lt;about-me&gt;</span></h2>
+
+    <div class="about__grid">
+      <div class="about__avatar">
+        <div class="avatar-card">
+          <span class="avatar-initials">PD</span>
+        </div>
+      </div>
+
+      <div class="about__content">
+        <p>
+          I'm <strong>Pau Dura Pérez</strong>, a specialist in <strong>Planning Management</strong> and
+          <strong>data analysis</strong>. I'm passionate about everything to do with data: from
+          gathering and cleaning it to turning it into <strong>clear visualisations</strong>
+          that make decision-making easier.
+        </p>
+        <p>
+          I firmly believe a good dashboard is worth more than a thousand lines of report: if the data
+          can be understood at a glance, decisions are made faster and better. That's why I combine
+          strategic planning with analytical tools to turn uncertainty into
+          concrete action plans.
+        </p>
+        <p>
+          When I'm not optimising a forecast or building a dashboard, you'll find me
+          exploring new ways to tell stories with data.
+        </p>
+
+        <div class="skills">
+          <span class="skill-tag"><span class="skill-key">Python</span>=<span class="skill-val">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">SQL</span>=<span class="skill-val">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">PowerBI</span>=<span class="skill-val">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">Tableau</span>=<span class="skill-val">"intermediate"</span></span>
+          <span class="skill-tag"><span class="skill-key">Excel</span>=<span class="skill-val">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">S&amp;OP</span>=<span class="skill-val">"expert"</span></span>
+          <span class="skill-tag"><span class="skill-key">Forecasting</span>=<span class="skill-val">"advanced"</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section section--alt">
+  <div class="container">
+    <h2 class="section__title"><span class="tag">&lt;projects&gt;</span></h2>
+    <p class="section__subtitle">// a selection of planning and data analysis projects</p>
+
+    <div class="projects__grid">
+
+      <article class="project-card">
+        <div class="terminal__bar">
+          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+          <span class="terminal__title">demand_forecast.py</span>
+        </div>
+        <div class="project-card__body">
+          <h3>Demand Forecasting Dashboard</h3>
+          <p>
+            Demand forecasting model built in Python (Prophet) and integrated into a Power BI dashboard.
+            Cut forecast error by <strong>18%</strong> and automated the weekly data refresh.
+          </p>
+          <pre class="code-snippet"><code><span class="tok-var">forecast</span> = <span class="tok-fn">model</span>.<span class="tok-fn">predict</span>(<span class="tok-var">future_dates</span>)
+<span class="tok-fn">plot_forecast</span>(<span class="tok-var">forecast</span>, <span class="tok-var">actuals</span>)</code></pre>
+          <div class="tech-tags">
+            <span>Python</span><span>Prophet</span><span>Power BI</span><span>SQL</span>
+          </div>
+          <div class="project-card__links">
+            <a href="#" class="btn btn--small">Live demo</a>
+            <a href="#" class="btn btn--small btn--ghost">Details</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card">
+        <div class="terminal__bar">
+          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+          <span class="terminal__title">supply_chain.sql</span>
+        </div>
+        <div class="project-card__body">
+          <h3>Supply Chain Analytics Platform</h3>
+          <p>
+            Supply chain KPI platform built on SQL Server and Tableau,
+            with views by warehouse, carrier and SKU. Consolidated <strong>7 separate data sources</strong>.
+          </p>
+          <pre class="code-snippet"><code><span class="tok-key">SELECT</span> warehouse, <span class="tok-fn">SUM</span>(units) <span class="tok-key">AS</span> total
+<span class="tok-key">FROM</span> inventory
+<span class="tok-key">GROUP BY</span> warehouse
+<span class="tok-key">ORDER BY</span> total <span class="tok-key">DESC</span>;</code></pre>
+          <div class="tech-tags">
+            <span>SQL Server</span><span>Tableau</span><span>ETL</span>
+          </div>
+          <div class="project-card__links">
+            <a href="#" class="btn btn--small">Live demo</a>
+            <a href="#" class="btn btn--small btn--ghost">Details</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card">
+        <div class="terminal__bar">
+          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+          <span class="terminal__title">auto_report.py</span>
+        </div>
+        <div class="project-card__body">
+          <h3>Automated Reporting Pipeline</h3>
+          <p>
+            Python pipeline that extracts, transforms and sends weekly reports automatically,
+            saving <strong>10+ hours</strong> of manual work a month.
+          </p>
+          <pre class="code-snippet"><code><span class="tok-key">def</span> <span class="tok-fn">generate_report</span>():
+    <span class="tok-var">data</span> = <span class="tok-fn">extract</span>()
+    <span class="tok-fn">send_email</span>(<span class="tok-fn">build_pdf</span>(<span class="tok-var">data</span>))</code></pre>
+          <div class="tech-tags">
+            <span>Python</span><span>Pandas</span><span>Excel VBA</span>
+          </div>
+          <div class="project-card__links">
+            <a href="#" class="btn btn--small">Live demo</a>
+            <a href="#" class="btn btn--small btn--ghost">Details</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card">
+        <div class="terminal__bar">
+          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+          <span class="terminal__title">planning_simulator.py</span>
+        </div>
+        <div class="project-card__body">
+          <h3>Sales &amp; Inventory Optimizer</h3>
+          <p>
+            "What-if" simulation tool for planning sales and inventory scenarios,
+            used by the S&amp;OP team to reduce stock-outs by <strong>25%</strong>.
+          </p>
+          <pre class="code-snippet"><code><span class="tok-var">scenario</span> = <span class="tok-fn">simulate</span>(<span class="tok-var">demand</span>, <span class="tok-var">lead_time</span>)
+<span class="tok-fn">optimize_inventory</span>(<span class="tok-var">scenario</span>)</code></pre>
+          <div class="tech-tags">
+            <span>Python</span><span>NumPy</span><span>Power BI</span>
+          </div>
+          <div class="project-card__links">
+            <a href="#" class="btn btn--small">Live demo</a>
+            <a href="#" class="btn btn--small btn--ghost">Details</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section">
+  <div class="container">
+    <h2 class="section__title"><span class="tag">&lt;experience&gt;</span></h2>
+
+    <div class="timeline">
+
+      <div class="timeline__item">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <span class="timeline__date">2022 — present</span>
+          <h3>Planning Manager <span class="at">@</span> NovaLogix Group</h3>
+          <ul>
+            <li>Led the regional S&amp;OP process, coordinating sales, operations and finance.</li>
+            <li>Designed Power BI dashboards that cut reporting time by 40%.</li>
+            <li>Implemented forecasting models that improved demand accuracy by 18%.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline__item">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <span class="timeline__date">2019 — 2022</span>
+          <h3>Data Analyst <span class="at">@</span> Vertex Retail Solutions</h3>
+          <ul>
+            <li>Built ETL pipelines in Python and SQL to consolidate data from more than 50 shops.</li>
+            <li>Developed Tableau visualisations to track commercial KPIs.</li>
+            <li>Automated recurring reports, saving the team more than 10 hours a week.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="timeline__item">
+        <div class="timeline__dot"></div>
+        <div class="timeline__content">
+          <span class="timeline__date">2017 — 2019</span>
+          <h3>Junior Business Analyst <span class="at">@</span> BrightPath Consulting</h3>
+          <ul>
+            <li>Supported client data analysis for strategy consulting projects.</li>
+            <li>Created advanced Excel reports and the first versions of Power BI dashboards.</li>
+            <li>Helped define KPIs for tracking internal projects.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section section--alt">
+  <div class="container contact__inner">
+    <div class="contact__info">
+      <h2 class="section__title"><span class="tag">&lt;contact-me&gt;</span></h2>
+      <p>
+        Have a planning or data analysis project in mind?
+        Drop me a line and I'll get back to you as soon as possible.
+      </p>
+      <ul class="contact__list">
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
+          <a href="mailto:pauduraperez@gmail.com">pauduraperez@gmail.com</a>
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 21a2 2 0 0 0 1-1.72V16a2 2 0 0 0-2-2h-.09a16 16 0 0 1-6.16-1.9 16 16 0 0 1-5-5A16 16 0 0 1 6.7 4.2 2 2 0 0 0 4.72 2H2a2 2 0 0 0-2 2c0 9.94 8.06 18 18 18a1.68 1.68 0 0 0 .84-.14z"/></svg>
+          <span>+34 000 000 000</span>
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Barcelona, Spain</span>
+        </li>
+      </ul>
+    </div>
+
+    <form id="contactForm" class="contact__form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="How can I help?" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Write your message..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn--primary" id="submitBtn">Send message</button>
+      <p class="form-status" id="formStatus"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>&lt;/&gt; Designed and built by Pau Dura Pérez — © 2026</p>
+  </div>
+</footer>
+
+<script>
+// Mobile nav toggle
+const navToggle = document.getElementById("navToggle");
+const navLinks = document.getElementById("navLinks");
+navToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
+navLinks.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => navLinks.classList.remove("open"));
+});
+
+// Hero typing animation
+const typedEl = document.getElementById("typedText");
+const phrases = ["Planning Manager", "Data Analyst", "Data Storyteller", "Forecast Enthusiast"];
+let phraseIndex = 0, charIndex = 0, deleting = false;
+function typeLoop() {
+  const current = phrases[phraseIndex];
+  if (!deleting) {
+    charIndex++;
+    typedEl.textContent = current.slice(0, charIndex);
+    if (charIndex === current.length) { deleting = true; setTimeout(typeLoop, 1400); return; }
+  } else {
+    charIndex--;
+    typedEl.textContent = current.slice(0, charIndex);
+    if (charIndex === 0) { deleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
+  }
+  setTimeout(typeLoop, deleting ? 40 : 80);
+}
+typeLoop();
+
+// Scroll reveal
+const revealTargets = document.querySelectorAll(".section, .project-card, .timeline__item");
+revealTargets.forEach((el) => {
+  el.style.opacity = "0";
+  el.style.transform = "translateY(24px)";
+  el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = "1";
+      entry.target.style.transform = "translateY(0)";
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealTargets.forEach((el) => observer.observe(el));
+
+// Contact form (demo only — real site sends via EmailJS)
+const contactForm = document.getElementById("contactForm");
+const formStatus = document.getElementById("formStatus");
+contactForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  formStatus.textContent = "This is only a preview — the live site sends messages via EmailJS.";
+  formStatus.className = "form-status sending";
+});
+</script>
+
+</body></html>
