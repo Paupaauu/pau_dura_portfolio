@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 
@@ -276,6 +276,27 @@
   </div>
 </section>
 
+<!-- HIRE ME (playful section: the "No" button runs away) -->
+<section id="hire" class="section hire">
+  <div class="container">
+    <div class="hire__box">
+      <div class="terminal__bar">
+        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+        <span class="terminal__title">decision.py</span>
+      </div>
+      <div class="hire__body">
+        <p class="hire__prompt"><span class="tok-key">&gt;&gt;&gt;</span> <span class="tok-fn">input</span>(<span class="tok-str">"…"</span>)</p>
+        <h2 class="hire__title">Do you want to hire me?</h2>
+        <div class="hire__arena" id="hireArena">
+          <a href="#contact" class="btn btn--primary hire__yes" id="hireYes">Yes</a>
+          <button type="button" class="btn btn--ghost hire__no" id="hireNo">No</button>
+        </div>
+        <p class="hire__counter" id="hireCounter" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact" class="section section--alt">
   <div class="container contact__inner">
@@ -331,6 +352,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=5"></script>
+<script src="script.js?v=7"></script>
 
 </body></html>

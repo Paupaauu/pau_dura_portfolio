@@ -453,6 +453,58 @@ img { max-width: 100%; display: block; }
 }
 
 /* ==========================================================================
+   Hire me (playful section)
+   ========================================================================== */
+.hire__box {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.hire__body { padding: 36px 28px 28px; text-align: center; }
+.hire__prompt {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+.hire__title {
+  font-family: var(--font-mono);
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+/* Both buttons start side by side; only the "No" button ever moves */
+.hire__arena {
+  position: relative;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+.hire__yes { white-space: nowrap; }
+.hire__yes:hover { transform: none; box-shadow: 0 8px 24px rgba(88,166,255,0.25); }
+.hire__no {
+  white-space: nowrap;
+  transition: left 0.3s ease, top 0.3s ease, border-color 0.15s, color 0.15s;
+  z-index: 2;
+}
+.hire__no.is-placed { position: absolute; }
+.hire__no-slot { visibility: hidden; }
+
+.hire__counter {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  min-height: 1.3em;
+}
+
+/* ==========================================================================
    Contact
    ========================================================================== */
 .contact__inner {
@@ -599,6 +651,8 @@ img { max-width: 100%; display: block; }
 }
 
 @media (max-width: 720px) {
+  .hire__body { padding: 28px 16px 20px; }
+  .hire__arena { height: 280px; }
   .step { padding: 18px 16px; }
   .nav-links {
     position: absolute;

@@ -50,6 +50,88 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 revealTargets.forEach((el) => observer.observe(el));
 
+// "Do you want to hire me?" — the No button runs away and gets chatty
+const hireArena = document.getElementById("hireArena");
+const hireYes = document.getElementById("hireYes");
+const hireNo = document.getElementById("hireNo");
+const hireCounter = document.getElementById("hireCounter");
+if (hireArena && hireYes && hireNo) {
+  const phrases = [
+    "No", "No", "Are you sure?", "Come on... think about it...", "Sure? Sure?",
+    "Really?", "I make great dashboards...", "Wrong button!", "Look, the other one is bigger",
+    "My forecast says you'll click Yes", "Last chance...",
+  ];
+  const giveUpAt = 14; // after this many tries the No button surrenders
+  let attempts = 0;
+
+  // Rectangles relative to the arena
+  const relRect = (el) => {
+    const a = hireArena.getBoundingClientRect(), r = el.getBoundingClientRect();
+    return { x: r.left - a.left, y: r.top - a.top, w: r.width, h: r.height };
+  };
+  const overlaps = (a, b, gap = 16) =>
+    a.x < b.x + b.w + gap && a.x + a.w + gap > b.x && a.y < b.y + b.h + gap && a.y + a.h + gap > b.y;
+
+  // First escape: take the No button out of the row but leave an invisible
+  // placeholder of the same size, so the Yes button never shifts.
+  const detachNo = () => {
+    if (hireNo.classList.contains("is-placed")) return;
+    const start = relRect(hireNo);
+    const slot = document.createElement("span");
+    slot.className = "btn btn--ghost hire__no-slot";
+    slot.textContent = hireNo.textContent;
+    slot.setAttribute("aria-hidden", "true");
+    hireNo.after(slot);
+    hireNo.classList.add("is-placed");
+    hireNo.style.left = `${start.x}px`;
+    hireNo.style.top = `${start.y}px`;
+    void hireNo.offsetWidth; // apply the starting point so the jump animates from there
+  };
+
+  const dodge = () => {
+    attempts++;
+    detachNo();
+    if (attempts >= giveUpAt) {
+      hireNo.textContent = "Fine... Yes!";
+      hireCounter.textContent = "// I knew you'd come round";
+      return;
+    }
+    hireNo.textContent = phrases[Math.min(attempts, phrases.length - 1)];
+    hireCounter.textContent = `// attempts to say no: ${attempts}`;
+
+    // Pick a random spot inside the arena that does not cover the Yes button
+    const arenaW = hireArena.clientWidth, arenaH = hireArena.clientHeight;
+    const no = relRect(hireNo), yes = relRect(hireYes);
+    let spot = null;
+    for (let i = 0; i < 30 && !spot; i++) {
+      const candidate = { x: Math.random() * (arenaW - no.w), y: Math.random() * (arenaH - no.h), w: no.w, h: no.h };
+      const farEnough = Math.hypot(candidate.x - no.x, candidate.y - no.y) > 80;
+      if (!overlaps(candidate, yes) && farEnough) spot = candidate;
+    }
+    if (!spot) spot = { x: 0, y: 0 };
+    hireNo.style.left = `${spot.x}px`;
+    hireNo.style.top = `${spot.y}px`;
+  };
+
+  // Mouse users: it escapes before they can click. Touch / keyboard: it escapes on press.
+  hireNo.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && attempts < giveUpAt) dodge(); });
+  hireNo.addEventListener("click", () => {
+    if (attempts >= giveUpAt) {
+      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    dodge();
+  });
+
+  // Keep the No button inside the arena if the window is resized
+  window.addEventListener("resize", () => {
+    if (!hireNo.classList.contains("is-placed")) return;
+    const no = relRect(hireNo);
+    hireNo.style.left = `${Math.min(no.x, hireArena.clientWidth - no.w)}px`;
+    hireNo.style.top = `${Math.min(no.y, hireArena.clientHeight - no.h)}px`;
+  });
+}
+
 // Contact form (demo only — real site sends via EmailJS)
 const contactForm = document.getElementById("contactForm");
 const formStatus = document.getElementById("formStatus");
