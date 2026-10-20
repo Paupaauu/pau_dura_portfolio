@@ -4,16 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pau Dura Pérez — Planning Manager & Data Analyst</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
-
-<div class="preview-banner">Preview — the live site uses JetBrains Mono / Inter via Google Fonts and EmailJS; here they are replaced with system fonts and form submission is disabled</div>
 
 <!-- NAV -->
 <header class="navbar">
   <div class="container navbar__inner">
-    <a href="#home" class="logo">&lt;PauDura<span class="accent">/</span>&gt;</a>
+    <a href="#home" class="logo">&lt;PauDurà<span class="accent">/</span>&gt;</a>
     <nav class="nav-links" id="navLinks">
       <a href="#home">home</a>
       <a href="#about">about</a>
@@ -32,7 +33,7 @@
   <div class="container hero__inner">
     <div class="hero__text">
       <p class="hero__pretitle">// welcome to my portfolio</p>
-      <h1 class="hero__title">Pau Dura Pérez</h1>
+      <h1 class="hero__title">Pau Durà Pérez</h1>
       <p class="hero__subtitle">
         <span class="typed" id="typedText"></span><span class="cursor">|</span>
       </p>
@@ -103,12 +104,12 @@
         </p>
 
         <div class="skills">
-          <span class="skill-tag"><span class="skill-key">Python</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">SQL</span>=<span class="skill-val">"advanced"</span></span>
           <span class="skill-tag"><span class="skill-key">PowerBI</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">Tableau</span>=<span class="skill-val">"intermediate"</span></span>
+          <span class="skill-tag"><span class="skill-key">Looker Studio</span>=<span class="skill-val">"advanced"</span></span>
           <span class="skill-tag"><span class="skill-key">Excel</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">S&amp;OP</span>=<span class="skill-val">"expert"</span></span>
+          <span class="skill-tag"><span class="skill-key">PowerQuery</span>=<span class="skill-val">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">Python</span>=<span class="skill-val">"intermediate"</span></span>
+          <span class="skill-tag"><span class="skill-key">AI</span>=<span class="skill-val">"always learning it, always using it"</span></span>
           <span class="skill-tag"><span class="skill-key">Forecasting</span>=<span class="skill-val">"advanced"</span></span>
         </div>
       </div>
@@ -130,19 +131,21 @@
           <span class="terminal__title">demand_forecast.py</span>
         </div>
         <div class="project-card__body">
-          <h3>Demand Forecasting Dashboard</h3>
+          <h3>Historical Data Analysis &amp; Forecasting</h3>
           <p>
-            Demand forecasting model built in Python (Prophet) and integrated into a Power BI dashboard.
-            Cut forecast error by <strong>18%</strong> and automated the weekly data refresh.
+            Assessment of historical data quality, identification of behavioural patterns and construction
+            of fine-tuned forecasts, all organised into visual, interactive dashboards that make the results
+            easy to interpret and support decision-making.
           </p>
-          <pre class="code-snippet"><code><span class="tok-var">forecast</span> = <span class="tok-fn">model</span>.<span class="tok-fn">predict</span>(<span class="tok-var">future_dates</span>)
-<span class="tok-fn">plot_forecast</span>(<span class="tok-var">forecast</span>, <span class="tok-var">actuals</span>)</code></pre>
+          <a href="projects/forecasting_liveDemo.html" class="project-card__preview" target="_blank" rel="noopener" aria-label="Open the forecasting dashboard">
+            <img src="projects/img/forecasting_preview.png" alt="Monthly history and forecast chart from the forecasting dashboard" width="838" height="250" loading="lazy">
+          </a>
           <div class="tech-tags">
-            <span>Python</span><span>Prophet</span><span>Power BI</span><span>SQL</span>
+            <span>Data Analysis</span><span>Forecasting</span><span>Seasonality Analysis</span><span>AI-Assisted Analyst</span>
           </div>
           <div class="project-card__links">
-            <a href="#" class="btn btn--small">Live demo</a>
-            <a href="#" class="btn btn--small btn--ghost">Details</a>
+            <a href="projects/forecasting_liveDemo.html" class="btn btn--small btn--ghost" target="_blank" rel="noopener">Live demo</a>
+            <a href="projects/forecasting_moreDetails.html" class="btn btn--small btn--ghost">Details</a>
           </div>
         </div>
       </article>
@@ -279,8 +282,9 @@
     <div class="contact__info">
       <h2 class="section__title"><span class="tag">&lt;contact-me&gt;</span></h2>
       <p>
-        Have a planning or data analysis project in mind?
-        Drop me a line and I'll get back to you as soon as possible.
+        Have a planning or data analysis project in mind, or would you like to know
+        more about me and how I could fit into your team? Drop me a line and
+        I'll get back to you as soon as possible.
       </p>
       <ul class="contact__list">
         <li>
@@ -289,11 +293,11 @@
         </li>
         <li>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 21a2 2 0 0 0 1-1.72V16a2 2 0 0 0-2-2h-.09a16 16 0 0 1-6.16-1.9 16 16 0 0 1-5-5A16 16 0 0 1 6.7 4.2 2 2 0 0 0 4.72 2H2a2 2 0 0 0-2 2c0 9.94 8.06 18 18 18a1.68 1.68 0 0 0 .84-.14z"/></svg>
-          <span>+34 000 000 000</span>
+          <a href="tel:+34697631938">+34 697 631 938</a>
         </li>
         <li>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>Barcelona, Spain</span>
+          <span>Valencia, Spain · Working remotely</span>
         </li>
       </ul>
     </div>
@@ -327,60 +331,6 @@
   </div>
 </footer>
 
-<script>
-// Mobile nav toggle
-const navToggle = document.getElementById("navToggle");
-const navLinks = document.getElementById("navLinks");
-navToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
-navLinks.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => navLinks.classList.remove("open"));
-});
-
-// Hero typing animation
-const typedEl = document.getElementById("typedText");
-const phrases = ["Planning Manager", "Data Analyst", "Data Storyteller", "Forecast Enthusiast"];
-let phraseIndex = 0, charIndex = 0, deleting = false;
-function typeLoop() {
-  const current = phrases[phraseIndex];
-  if (!deleting) {
-    charIndex++;
-    typedEl.textContent = current.slice(0, charIndex);
-    if (charIndex === current.length) { deleting = true; setTimeout(typeLoop, 1400); return; }
-  } else {
-    charIndex--;
-    typedEl.textContent = current.slice(0, charIndex);
-    if (charIndex === 0) { deleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
-  }
-  setTimeout(typeLoop, deleting ? 40 : 80);
-}
-typeLoop();
-
-// Scroll reveal
-const revealTargets = document.querySelectorAll(".section, .project-card, .timeline__item");
-revealTargets.forEach((el) => {
-  el.style.opacity = "0";
-  el.style.transform = "translateY(24px)";
-  el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-});
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = "1";
-      entry.target.style.transform = "translateY(0)";
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15 });
-revealTargets.forEach((el) => observer.observe(el));
-
-// Contact form (demo only — real site sends via EmailJS)
-const contactForm = document.getElementById("contactForm");
-const formStatus = document.getElementById("formStatus");
-contactForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  formStatus.textContent = "This is only a preview — the live site sends messages via EmailJS.";
-  formStatus.className = "form-status sending";
-});
-</script>
+<script src="script.js?v=5"></script>
 
 </body></html>

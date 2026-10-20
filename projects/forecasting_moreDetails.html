@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historical Data Analysis &amp; Forecasting — Pau Durà Pérez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../styles.css?v=5">
+</head>
+<body>
+
+<!-- NAV (same as the home page; links point back to its sections) -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a href="../index.html#home" class="logo">&lt;PauDurà<span class="accent">/</span>&gt;</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="../index.html#home">home</a>
+      <a href="../index.html#about">about</a>
+      <a href="../index.html#projects">projects</a>
+      <a href="../index.html#experience">experience</a>
+      <a href="../index.html#contact">contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- PROJECT HEADER -->
+<section class="page-header">
+  <div class="container">
+    <a href="../index.html#projects" class="back-link">&larr; Back to projects</a>
+    <p class="hero__pretitle">// projects / demand_forecast.py</p>
+    <h1 class="page-header__title">Historical Data Analysis &amp; Forecasting</h1>
+    <p class="page-header__intro">
+      Assessment of historical data quality, identification of behavioural patterns and construction
+      of fine-tuned forecasts, all organised into visual, interactive dashboards that make the results
+      easy to interpret and support decision-making.
+    </p>
+    <div class="tech-tags">
+      <span>Data Analysis</span><span>Forecasting</span><span>Seasonality Analysis</span><span>AI-Assisted Analyst</span>
+    </div>
+    <div class="hero__cta">
+      <a href="forecasting_liveDemo.html" class="btn btn--primary" target="_blank" rel="noopener">Open the dashboard</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section section--alt">
+  <div class="container">
+    <h2 class="section__title"><span class="tag">&lt;process&gt;</span></h2>
+    <p class="section__subtitle">// how the work is carried out, step by step</p>
+        <div class="steps">
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">1.</span> <span class="step__name">Data collection and consolidation</span><span class="step__parens">()</span></h4>
+              <p>Integration of the client's source data (CSV, Excel or BigQuery), even when it comes from different systems, into a single consistent series per channel or segment and per time interval.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">2.</span> <span class="step__name">Data quality assessment</span><span class="step__parens">()</span></h4>
+              <p>Automatic review of the history to detect days with no data, public holidays, service hours, residual or discontinued segments and atypical days (incidents, one-off campaigns). Every data-cleaning decision is agreed with the client and documented.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">3.</span> <span class="step__name">Analysis of historical behaviour</span><span class="step__parens">()</span></h4>
+              <p>Identification of the trend, annual seasonality, the weight of each day of the week, the time-of-month effect and the intraday distribution in 30-minute slots, by channel or segment.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">4.</span> <span class="step__name">Building the forecast</span><span class="step__parens">()</span></h4>
+              <p>The daily forecast for each channel or segment is built by comparing three methods: the average of the last 4 weeks, seasonal decomposition (day of the week, time of the month, trend and annual seasonality) and Holt-Winters exponential smoothing (ETS). Each method is validated against the history itself (backtesting) and the one with the lowest error (WAPE) is chosen, with a P10–P90 confidence band. The forecast includes the effect of public holidays and, if the client provides target volumes, is adjusted to them without losing the patterns. Finally, it is split into 30-minute slots and aggregated to monthly level, so that all granularities add up.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">5.</span> <span class="step__name">Interactive dashboard</span><span class="step__parens">()</span></h4>
+              <p>Results presented in a dashboard that brings together the history, patterns, forecast, data quality and methodology, with findings written in plain language for the client.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">6.</span> <span class="step__name">Export for planning</span><span class="step__parens">()</span></h4>
+              <p>Download of the forecast at 30-minute, daily or monthly level, ready for Excel or BigQuery and for workforce sizing.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">7.</span> <span class="step__name">Updates and tracking</span><span class="step__parens">()</span></h4>
+              <p>Monthly update with new data and comparison of forecast against actuals, to measure the deviation and fine-tune the model.</p>
+            </div>
+          </article>
+        </div>
+    <div class="page-footer-nav">
+      <a href="../index.html#projects" class="btn btn--small btn--ghost">&larr; Back to projects</a>
+      <a href="forecasting_liveDemo.html" class="btn btn--small btn--primary" target="_blank" rel="noopener">Open the dashboard</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>&lt;/&gt; Designed and built by Pau Dura Pérez — © 2026</p>
+  </div>
+</footer>
+
+<script src="../script.js?v=5"></script>
+
+</body></html>
