@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
 
@@ -80,9 +80,8 @@
 
     <div class="about__grid">
       <div class="about__avatar">
-        <div class="avatar-card">
-          <span class="avatar-initials">PD</span>
-        </div>
+        <img src="img/avatar.png?v=10" class="avatar-illustration" width="640" height="535"
+             alt="Illustration of Pau working on a laptop with a dog alongside, surrounded by charts, code and an AI robot">
       </div>
 
       <div class="about__content">
@@ -153,71 +152,24 @@
       <article class="project-card">
         <div class="terminal__bar">
           <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-          <span class="terminal__title">supply_chain.sql</span>
+          <span class="terminal__title">training_dashboard.gs</span>
         </div>
         <div class="project-card__body">
-          <h3>Supply Chain Analytics Platform</h3>
+          <h3>Training Analytics Dashboard</h3>
           <p>
-            Supply chain KPI platform built on SQL Server and Tableau,
-            with views by warehouse, carrier and SKU. Consolidated <strong>7 separate data sources</strong>.
+            Automated pipeline and web dashboard for corporate training data: monthly LMS exports are loaded into
+            BigQuery, cleaned and matched to the workforce list, then turned into an interactive, multilingual
+            dashboard that replaced a Looker Studio report and updates with a single click.
           </p>
-          <pre class="code-snippet"><code><span class="tok-key">SELECT</span> warehouse, <span class="tok-fn">SUM</span>(units) <span class="tok-key">AS</span> total
-<span class="tok-key">FROM</span> inventory
-<span class="tok-key">GROUP BY</span> warehouse
-<span class="tok-key">ORDER BY</span> total <span class="tok-key">DESC</span>;</code></pre>
+          <a href="projects/training_liveDemo.html" class="project-card__preview" target="_blank" rel="noopener" aria-label="Open the training dashboard demo">
+            <img src="projects/img/training_preview.png?v=10" alt="Training dashboard with KPIs, enrolment status and hours by month" width="1280" height="705" loading="lazy">
+          </a>
           <div class="tech-tags">
-            <span>SQL Server</span><span>Tableau</span><span>ETL</span>
+            <span>Data Engineering</span><span>BigQuery &amp; SQL</span><span>Apps Script</span><span>Dashboard Design</span><span>Automation</span>
           </div>
           <div class="project-card__links">
-            <a href="#" class="btn btn--small">Live demo</a>
-            <a href="#" class="btn btn--small btn--ghost">Details</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card">
-        <div class="terminal__bar">
-          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-          <span class="terminal__title">auto_report.py</span>
-        </div>
-        <div class="project-card__body">
-          <h3>Automated Reporting Pipeline</h3>
-          <p>
-            Python pipeline that extracts, transforms and sends weekly reports automatically,
-            saving <strong>10+ hours</strong> of manual work a month.
-          </p>
-          <pre class="code-snippet"><code><span class="tok-key">def</span> <span class="tok-fn">generate_report</span>():
-    <span class="tok-var">data</span> = <span class="tok-fn">extract</span>()
-    <span class="tok-fn">send_email</span>(<span class="tok-fn">build_pdf</span>(<span class="tok-var">data</span>))</code></pre>
-          <div class="tech-tags">
-            <span>Python</span><span>Pandas</span><span>Excel VBA</span>
-          </div>
-          <div class="project-card__links">
-            <a href="#" class="btn btn--small">Live demo</a>
-            <a href="#" class="btn btn--small btn--ghost">Details</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card">
-        <div class="terminal__bar">
-          <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-          <span class="terminal__title">planning_simulator.py</span>
-        </div>
-        <div class="project-card__body">
-          <h3>Sales &amp; Inventory Optimizer</h3>
-          <p>
-            "What-if" simulation tool for planning sales and inventory scenarios,
-            used by the S&amp;OP team to reduce stock-outs by <strong>25%</strong>.
-          </p>
-          <pre class="code-snippet"><code><span class="tok-var">scenario</span> = <span class="tok-fn">simulate</span>(<span class="tok-var">demand</span>, <span class="tok-var">lead_time</span>)
-<span class="tok-fn">optimize_inventory</span>(<span class="tok-var">scenario</span>)</code></pre>
-          <div class="tech-tags">
-            <span>Python</span><span>NumPy</span><span>Power BI</span>
-          </div>
-          <div class="project-card__links">
-            <a href="#" class="btn btn--small">Live demo</a>
-            <a href="#" class="btn btn--small btn--ghost">Details</a>
+            <a href="projects/training_liveDemo.html" class="btn btn--small btn--ghost" target="_blank" rel="noopener">Live demo</a>
+            <a href="projects/training_moreDetails.html" class="btn btn--small btn--ghost">Details</a>
           </div>
         </div>
       </article>
@@ -352,6 +304,6 @@
   </div>
 </footer>
 
-<script src="script.js?v=7"></script>
+<script src="script.js?v=10"></script>
 
 </body></html>

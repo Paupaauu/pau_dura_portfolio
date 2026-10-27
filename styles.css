@@ -303,27 +303,17 @@ img { max-width: 100%; display: block; }
    ========================================================================== */
 .about__grid {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 48px;
   align-items: start;
   margin-top: 40px;
 }
 
-.avatar-card {
+.avatar-illustration {
   width: 100%;
-  aspect-ratio: 1;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 20px 50px rgba(88,166,255,0.2);
-}
-.avatar-initials {
-  font-family: var(--font-mono);
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: #061019;
+  height: auto;
+  /* soft light halo so the drawing's dark outlines stay visible on the dark page */
+  filter: drop-shadow(0 0 1px rgba(201, 209, 217, 0.45)) drop-shadow(0 12px 30px rgba(88, 166, 255, 0.12));
 }
 
 .about__content p { margin-bottom: 16px; color: var(--text-dim); }
@@ -606,6 +596,32 @@ img { max-width: 100%; display: block; }
   max-width: 680px;
   font-size: 1.05rem;
 }
+.facts {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+}
+.facts li {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+.facts b { color: var(--accent-green); font-size: 1rem; margin-right: 4px; }
+.demo-note {
+  max-width: 680px;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  border-left: 3px solid var(--accent-orange);
+  padding-left: 12px;
+}
 .page-header .tech-tags { margin: 22px 0 28px; }
 
 .steps { list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 16px; }
@@ -645,7 +661,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 900px) {
   .hero__inner { grid-template-columns: 1fr; }
   .about__grid { grid-template-columns: 1fr; }
-  .avatar-card { max-width: 200px; }
+  .avatar-illustration { max-width: 340px; }
   .projects__grid { grid-template-columns: 1fr; }
   .contact__inner { grid-template-columns: 1fr; }
 }

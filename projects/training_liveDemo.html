@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Training Analytics Dashboard — Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+  /* Paleta corporativa: Orange Red, Carbon, White, Light Steel, Ecru, Stone Gray */
+  :root, [data-bs-theme="light"] {
+    --orange: #FF4500;
+    --orange-text: #C93700;
+    --orange-soft: rgba(255, 69, 0, .09);
+    --carbon: #2A2626;
+    --paper: #F9F9F8;
+    --card: #FFFFFF;
+    --ecru: #E2DDCE;
+    --stone: #A5A7A2;
+    --ink: #2A2626;
+    --muted: #6B6A66;
+    --line: #E7E3D8;
+    --hover: #F3F1EA;
+    --real: #2A2626;
+    --theory: #E2DDCE;
+    --theory-edge: #C9C3B1;
+    --ok: #4E9A6B;
+    --ok-text: #2F7148;
+    --ok-soft: rgba(78, 154, 107, .14);
+    --inc: #EE9466;
+    --inc-text: #B4562A;
+    --inc-soft: rgba(238, 148, 102, .16);
+    --nt: #A5A7A2;
+    --progress: #2A2626;
+    --on-accent: #FFFFFF;
+    --bs-body-bg: var(--paper);
+    --bs-body-color: var(--ink);
+    --bs-secondary-color: var(--muted);
+    --bs-border-color: var(--line);
+    --bs-link-color: var(--ink);
+    --bs-body-font-family: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif;
+  }
+  [data-bs-theme="dark"] {
+    --orange: #FF5A1F;
+    --orange-text: #FF8A5C;
+    --orange-soft: rgba(255, 90, 31, .14);
+    --carbon: #F9F9F8;
+    --paper: #0F0D0D;
+    --card: #1A1717;
+    --ecru: #E2DDCE;
+    --stone: #A5A7A2;
+    --ink: #F4F3EF;
+    --muted: #A5A7A2;
+    --line: #2C2828;
+    --hover: #231F1F;
+    --real: #5E6B73;
+    --theory: #E2DDCE;
+    --theory-edge: #E2DDCE;
+    --ok: #5FB07E;
+    --ok-text: #86CFA1;
+    --ok-soft: rgba(95, 176, 126, .16);
+    --inc: #D98A62;
+    --inc-text: #EBA982;
+    --inc-soft: rgba(217, 138, 98, .16);
+    --nt: #5E5C58;
+    --progress: #E2DDCE;
+    --on-accent: #0F0D0D;
+    --bs-body-bg: var(--paper);
+    --bs-body-color: var(--ink);
+    --bs-secondary-color: var(--muted);
+    --bs-border-color: var(--line);
+    --bs-link-color: var(--ink);
+  }
+
+  body { font-size: 14.5px; font-variant-numeric: tabular-nums; }
+  h1, h2, h3, .brand, .kpi .v, .modal-title { font-family: 'Sora', 'IBM Plex Sans', Arial, sans-serif; }
+
+  .topbar { background: var(--card); border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 18px; letter-spacing: -0.01em; color: var(--ink); margin: 0; }
+  .brand img { width: 34px; height: 34px; }
+  .brand small { display: block; font-family: 'IBM Plex Sans', Arial, sans-serif; font-weight: 400; color: var(--muted); font-size: 12.5px; letter-spacing: 0; }
+  .nav-pills .nav-link { color: var(--muted); font-weight: 500; border-radius: 6px; }
+  .nav-pills .nav-link:hover { color: var(--ink); }
+  .nav-pills .nav-link.active { background: var(--carbon); color: var(--on-accent); }
+  .lang .btn { font-size: 12px; font-weight: 600; padding: 4px 9px; }
+  .theme-btn { padding: 3px 9px; }
+  .zoom { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .zoom input { width: 150px; }
+  .form-range::-webkit-slider-thumb { background-color: var(--ink); }
+  .form-range::-moz-range-thumb { background-color: var(--ink); }
+  .form-range::-webkit-slider-runnable-track { background-color: var(--line); }
+  .form-range::-moz-range-track { background-color: var(--line); }
+  .form-range:focus::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--orange-soft); }
+
+  .filters { position: sticky; top: 0; z-index: 1020; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .filters .form-label { font-size: 12px; color: var(--muted); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+  .filters .form-select { font-size: 13.5px; }
+  .fbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+  .fbar > div { flex: 0 0 auto; }
+  .fbar .w-month { width: 132px; } .fbar .w-s { width: 150px; } .fbar .w-m { width: 168px; } .fbar .w-l { width: 200px; }
+  .fbar .w-course { flex: 1 1 300px; min-width: 260px; }
+  @media (max-width: 576px) { .fbar > div { flex: 1 1 calc(50% - 8px); width: auto !important; } .fbar .w-course { flex-basis: 100%; } }
+  .combo { position: relative; }
+  .combo-btn { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: left; width: 100%; }
+  .combo-pop { position: absolute; z-index: 1060; top: 100%; left: 0; width: max(100%, 440px); max-width: 92vw; margin-top: 4px; padding: 8px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 28px rgba(0, 0, 0, .3); }
+  .combo-list { max-height: 340px; overflow-y: auto; margin-top: 6px; }
+  .combo-opt { display: flex; justify-content: space-between; gap: 10px; padding: 6px 8px; border-radius: 5px; cursor: pointer; font-size: 13.5px; }
+  .combo-opt:hover, .combo-opt.active { background: var(--hover); }
+  .combo-opt.sel { font-weight: 600; }
+  .combo-opt .n { color: var(--muted); white-space: nowrap; }
+  .combo-opt { align-items: center; }
+  .combo-opt input { pointer-events: none; margin: 0; flex: 0 0 auto; }
+  .combo-opt .lbl { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+  .combo-opt .sub { display: block; font-size: 12px; color: var(--muted); }
+  .combo-actions { display: flex; gap: 14px; align-items: center; margin-top: 6px; font-size: 12.5px; }
+  .combo-actions .btn-link { color: var(--ink); font-size: 12.5px; }
+  .form-check-input { background-color: var(--card); border-color: var(--stone); }
+  .form-check-input:checked { background-color: var(--orange); border-color: var(--orange); }
+  .combo-empty { padding: 10px 8px; color: var(--muted); font-size: 13px; }
+  .gantt-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .cg-axis { position: relative; height: 22px; font-size: 11.5px; color: var(--muted); margin-bottom: 2px; }
+  .cg-axis span { position: absolute; top: 2px; transform: translateX(-50%); white-space: nowrap; }
+  .cg-axis span.today { color: var(--orange); font-weight: 600; }
+  .cg-scroll { max-height: 300px; overflow-y: auto; scrollbar-gutter: stable; border-top: 1px solid var(--line); }
+  .gantt-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+  .form-select, .form-control { background-color: var(--card); border-color: var(--line); }
+  .form-select.is-set { border-color: var(--orange); box-shadow: inset 0 0 0 1px var(--orange); }
+  .form-select:focus, .form-control:focus { border-color: var(--carbon); box-shadow: 0 0 0 3px var(--orange-soft); }
+
+  .card { background: var(--card); border-color: var(--line); border-radius: 8px; }
+  .card-header { background: transparent; border-bottom: 0; padding: 16px 18px 0; }
+  .card-title { font-size: 15px; font-weight: 600; margin: 0; }
+  .card-sub { font-size: 12.5px; color: var(--muted); }
+
+  .kpi { padding: 14px 18px; height: 100%; }
+  .kpi .v { font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; }
+  .kpi .l { font-size: 13px; color: var(--muted); }
+  .kpi .h { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi-main { border-top: 3px solid var(--orange); }
+
+  .chart-box { position: relative; height: 280px; }
+  .chart-box.tall { height: 340px; }
+
+  .table { --bs-table-bg: transparent; --bs-table-hover-bg: var(--hover); font-size: 13.5px; margin: 0; }
+  .table thead th { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; border-bottom-color: var(--line); }
+  .table td { border-color: var(--line); vertical-align: middle; }
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--ink); }
+  th.sorted::after { content: ' \25BC'; font-size: 9px; }
+  th.sorted.asc::after { content: ' \25B2'; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: var(--hover); }
+  .num { text-align: right; white-space: nowrap; }
+  .name-cell { max-width: 340px; }
+  .name-cell .sub { font-size: 12px; color: var(--muted); }
+
+  .stack { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--line); min-width: 120px; }
+  .stack span { display: block; height: 100%; }
+  .s-ok { background: var(--ok); }
+  .s-inc { background: var(--inc); }
+  .s-nt { background: var(--nt); }
+  .dev-up { color: var(--orange-text); font-weight: 600; }
+  .dev-down { color: var(--muted); }
+  .badge-st { font-weight: 500; font-size: 12px; border: 1px solid transparent; }
+  .badge-ok { background: var(--ok-soft); color: var(--ok-text); }
+  .badge-inc { background: var(--inc-soft); color: var(--inc-text); }
+  .badge-nt { background: transparent; color: var(--muted); border-color: var(--line); }
+  .badge-miss { background: var(--orange-soft); color: var(--orange-text); }
+
+  .btn-primary { --bs-btn-bg: var(--carbon); --bs-btn-border-color: var(--carbon); --bs-btn-color: var(--on-accent); --bs-btn-hover-bg: #000; --bs-btn-hover-border-color: #000; --bs-btn-hover-color: var(--on-accent); --bs-btn-active-bg: #000; --bs-btn-disabled-bg: var(--carbon); --bs-btn-disabled-border-color: var(--carbon); }
+  [data-bs-theme="dark"] .btn-primary { --bs-btn-hover-bg: #FFFFFF; --bs-btn-hover-border-color: #FFFFFF; --bs-btn-active-bg: #FFFFFF; }
+  .btn-outline-primary { --bs-btn-color: var(--ink); --bs-btn-border-color: var(--stone); --bs-btn-hover-bg: var(--hover); --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: var(--stone); --bs-btn-active-bg: var(--carbon); --bs-btn-active-color: var(--on-accent); --bs-btn-active-border-color: var(--carbon); }
+  .btn-check:checked + .btn-outline-primary { background: var(--carbon); border-color: var(--carbon); color: var(--on-accent); }
+
+  .nav-tabs { border-bottom-color: var(--line); }
+  .nav-tabs .nav-link { color: var(--muted); font-weight: 500; border: 0; border-bottom: 2px solid transparent; }
+  .nav-tabs .nav-link.active { color: var(--ink); background: transparent; border-bottom-color: var(--orange); }
+  .seg .btn { font-size: 12.5px; }
+
+  #agentPanel { --bs-offcanvas-width: min(760px, 100vw); background: var(--paper); }
+  .agent-head { background: var(--card); border-bottom: 1px solid var(--line); }
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 18px; font-size: 13px; }
+  .meta-grid .k { color: var(--muted); font-size: 12px; }
+  .course-item { background: var(--card); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; }
+  .course-item .top { padding: 12px 14px; cursor: pointer; }
+  .course-item .mods { border-top: 1px solid var(--line); padding: 6px 14px 10px; }
+  .progress { height: 6px; background: var(--line); }
+  .progress-bar { background: var(--progress); }
+  .progress-mini { width: 90px; display: inline-flex; vertical-align: middle; margin-right: 6px; }
+
+  .modal-content { background: var(--paper); border-color: var(--line); }
+  .modal-header { background: var(--card); border-bottom-color: var(--line); }
+
+  .loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--paper); z-index: 2000; flex-direction: column; gap: 14px; color: var(--muted); }
+  .loading img { width: 56px; height: 56px; }
+  .empty { padding: 28px; text-align: center; color: var(--muted); }
+  /* PDF: cabecera que se añade solo mientras se genera y Gantt completo (sin scroll) */
+  .pdf-mode .cg-scroll { max-height: none; overflow: visible; }
+  .pdf-head { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--orange); border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; }
+  .pdf-head .brand { font-size: 18px; }
+  .pdf-filters { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 13px; margin-top: 10px; }
+  .pdf-filters b { color: var(--muted); font-weight: 500; }
+  .hint { font-size: 12px; color: var(--muted); }
+  :focus-visible { outline: 3px solid var(--orange-soft); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+<style>
+.demo-ribbon { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: center;
+  padding: 6px 16px; font: 500 12.5px 'IBM Plex Sans', sans-serif; background: #FF4500; color: #fff; }
+.demo-ribbon a { color: #fff; text-decoration: none; font-weight: 600; }
+.demo-ribbon a:hover { text-decoration: underline; }
+.demo-logo { font-size: 1.6rem; color: #FF4500; margin-right: .5rem; }
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <i class="bi bi-mortarboard-fill demo-logo"></i>
+  <div class="spinner-border spinner-border-sm" role="status"></div>
+  <div data-i18n="loading"></div>
+  <div class="hint d-none" id="loadingSlow" data-i18n="loadingSlow"></div>
+</div>
+
+<div class="loading d-none" id="pdfCover">
+  <div class="spinner-border spinner-border-sm" role="status"></div>
+  <div data-i18n="pdf.working"></div>
+</div>
+
+<div class="demo-ribbon">
+  <a href="../index.html#projects"><i class="bi bi-arrow-left"></i> Back to portfolio</a>
+  <span>Demo · anonymised sample of real data (15 courses, ~330 people)</span>
+  <a href="training_moreDetails.html">Project details <i class="bi bi-arrow-right"></i></a>
+</div>
+
+<header class="topbar">
+  <div class="container-xxl py-3 d-flex flex-wrap align-items-center gap-3">
+    <h1 class="brand me-auto"><img src="data:image/png;base64,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" alt=""><span>Training Analytics Dashboard<small id="updatedAt"></small></span></h1>
+    <ul class="nav nav-pills gap-1" role="tablist">
+      <li class="nav-item"><button class="nav-link active" data-view="cursos"><i class="bi bi-journal-bookmark me-1"></i><span data-i18n="tab.courses"></span></button></li>
+      <li class="nav-item"><button class="nav-link" data-view="agentes"><i class="bi bi-people me-1"></i><span data-i18n="tab.agents"></span></button></li>
+    </ul>
+    <button class="btn btn-sm btn-outline-primary theme-btn" id="btnTheme" type="button"><i class="bi bi-sun" id="themeIcon"></i></button>
+    <div class="btn-group lang" role="group" aria-label="Language">
+      <input type="radio" class="btn-check" name="lang" id="langEs" value="es"><label class="btn btn-outline-primary" for="langEs">ES</label>
+      <input type="radio" class="btn-check" name="lang" id="langEn" value="en"><label class="btn btn-outline-primary" for="langEn">EN</label>
+      <input type="radio" class="btn-check" name="lang" id="langIt" value="it"><label class="btn btn-outline-primary" for="langIt">IT</label>
+    </div>
+  </div>
+</header>
+
+<div class="filters" id="filterBar">
+  <div class="container-xxl py-2">
+    <div class="fbar">
+      <div class="w-month"><label class="form-label" for="fFrom" data-i18n="f.from"></label><select id="fFrom" class="form-select form-select-sm"></select></div>
+      <div class="w-month"><label class="form-label" for="fTo" data-i18n="f.to"></label><select id="fTo" class="form-select form-select-sm"></select></div>
+      <div class="w-s"><label class="form-label" for="mf-site" data-i18n="f.site"></label><div class="combo" data-mf="site"></div></div>
+      <div class="w-s"><label class="form-label" for="mf-lob" data-i18n="f.lob"></label><div class="combo" data-mf="lob"></div></div>
+      <div class="w-m"><label class="form-label" for="mf-client" data-i18n="f.client"></label><div class="combo" data-mf="client"></div></div>
+      <div class="w-l"><label class="form-label" for="mf-campaign" data-i18n="f.campaign"></label><div class="combo" data-mf="campaign"></div></div>
+      <div class="w-s"><label class="form-label" for="mf-rol" data-i18n="f.role"></label><div class="combo" data-mf="rol"></div></div>
+      <div class="w-m"><label class="form-label" for="mf-estado" data-i18n="f.status"></label><div class="combo" data-mf="estado"></div></div>
+      <div class="w-course"><label class="form-label" for="mf-corso" data-i18n="f.course"></label><div class="combo" data-mf="corso"></div></div>
+      <div class="w-course d-none" id="wrapPersona"><label class="form-label" for="mf-persona" data-i18n="f.agent"></label><div class="combo" data-mf="persona"></div></div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-primary" id="btnClear"><i class="bi bi-x-lg me-1"></i><span data-i18n="f.clear"></span></button>
+        <button class="btn btn-sm btn-outline-primary" id="btnCsv"><i class="bi bi-download me-1"></i><span data-i18n="csv.btn"></span></button>
+        <button class="btn btn-sm btn-outline-primary" id="btnPdf"><i class="bi bi-file-earmark-pdf me-1"></i><span data-i18n="pdf.btn"></span></button>
+      </div>
+    </div>
+    <!-- Desplegable compartido por todos los filtros: se coloca bajo el filtro que se abre -->
+    <div class="combo-pop d-none" id="mfPop">
+      <input type="search" class="form-control form-control-sm" id="mfSearch" autocomplete="off" aria-controls="mfList">
+      <div class="combo-actions">
+        <button type="button" class="btn btn-link btn-sm p-0" id="mfAll" data-i18n="f.selectAll"></button>
+        <button type="button" class="btn btn-link btn-sm p-0" id="mfNone" data-i18n="f.selectNone"></button>
+        <span class="ms-auto hint" id="mfCount"></span>
+      </div>
+      <div class="combo-list" role="listbox" aria-multiselectable="true" id="mfList"></div>
+    </div>
+  </div>
+</div>
+
+<main class="container-xxl py-4">
+
+  <!-- ============ CURSOS ============ -->
+  <section id="view-cursos">
+    <div class="row g-3 mb-3" id="kpiCursos"></div>
+    <div class="row g-3 mb-3">
+      <div class="col-lg-4">
+        <div class="card h-100">
+          <div class="card-header"><h2 class="card-title" data-i18n="c.status"></h2><div class="card-sub" data-i18n="c.statusSub"></div></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chStatus"></canvas></div></div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="card h-100">
+          <div class="card-header"><h2 class="card-title" data-i18n="c.month"></h2><div class="card-sub" data-i18n="c.monthSub"></div></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chMonth"></canvas></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-3 mb-3">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h2 class="card-title" data-i18n="c.site"></h2><div class="card-sub" data-i18n="c.siteSub"></div></div>
+          <div class="card-body"><div class="chart-box tall"><canvas id="chSite"></canvas></div></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex flex-wrap justify-content-between align-items-start gap-2">
+            <div><h2 class="card-title" data-i18n="c.group"></h2><div class="card-sub" data-i18n="c.groupSub"></div></div>
+            <div class="btn-group btn-group-sm seg" role="group">
+              <input type="radio" class="btn-check" name="grp" id="grpLob" value="lob" checked><label class="btn btn-outline-primary" for="grpLob" data-i18n="g.lob"></label>
+              <input type="radio" class="btn-check" name="grp" id="grpClient" value="client"><label class="btn btn-outline-primary" for="grpClient" data-i18n="g.client"></label>
+              <input type="radio" class="btn-check" name="grp" id="grpCampaign" value="campaign"><label class="btn btn-outline-primary" for="grpCampaign" data-i18n="g.campaign"></label>
+            </div>
+          </div>
+          <div class="card-body"><div class="chart-box tall"><canvas id="chGroup"></canvas></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3" id="cgCard">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-end gap-2">
+        <div><h2 class="card-title" data-i18n="c.gantt"></h2><div class="card-sub" data-i18n="c.ganttSub"></div></div>
+        <div class="d-flex flex-wrap gap-3 hint gantt-legend" id="cgLegend"></div>
+      </div>
+      <div class="card-body">
+        <div class="cg-axis" id="cgAxis"></div>
+        <div class="cg-scroll" id="cgScroll"><div class="position-relative" id="cgBox"><canvas id="chCourseGantt"></canvas></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-end gap-2">
+        <div><h2 class="card-title" data-i18n="t.courses"></h2><div class="card-sub" data-i18n="t.coursesSub"></div></div>
+        <input type="search" id="courseSearch" data-html2canvas-ignore class="form-control form-control-sm" style="max-width: 260px" data-i18n-ph="t.searchCourse">
+      </div>
+      <div class="card-body"><div class="table-responsive"><table class="table table-hover" id="tblCourses"></table></div></div>
+    </div>
+  </section>
+
+  <!-- ============ AGENTES ============ -->
+  <section id="view-agentes" class="d-none">
+    <div class="row g-3 mb-3" id="kpiAgentes"></div>
+    <div class="row g-3 mb-3">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header"><h2 class="card-title" data-i18n="a.bands"></h2><div class="card-sub" data-i18n="a.bandsSub"></div></div>
+          <div class="card-body"><div class="chart-box"><canvas id="chAgentBands"></canvas></div></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex flex-wrap justify-content-between align-items-start gap-2">
+            <div><h2 class="card-title" data-i18n="a.scatter"></h2><div class="card-sub" data-i18n="a.scatterSub"></div></div>
+            <label class="zoom" for="scatterZoom" data-html2canvas-ignore><i class="bi bi-zoom-in" aria-hidden="true"></i><span data-i18n="a.zoom"></span>
+              <input type="range" class="form-range" id="scatterZoom" min="2" max="100" step="1" value="100"></label>
+          </div>
+          <div class="card-body"><div class="chart-box"><canvas id="chAgentScatter"></canvas></div><div class="hint mt-1" id="scatterOut"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-end gap-2">
+        <div><h2 class="card-title" data-i18n="t.agents"></h2><div class="card-sub" data-i18n="t.agentsSub"></div></div>
+        <div class="d-flex gap-2 flex-wrap">
+          <select id="agentOnly" data-html2canvas-ignore class="form-select form-select-sm" style="width: auto">
+            <option value="" data-i18n="o.all"></option>
+            <option value="pending" data-i18n="o.pending"></option>
+            <option value="missing" data-i18n="o.missing"></option>
+          </select>
+          <input type="search" id="agentSearch" data-html2canvas-ignore class="form-control form-control-sm" style="max-width: 260px" data-i18n-ph="t.searchAgent">
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive"><table class="table table-hover" id="tblAgents"></table></div>
+        <div class="text-center mt-3"><button class="btn btn-sm btn-outline-primary d-none" id="btnMoreAgents" data-html2canvas-ignore></button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ADMIN ============ -->
+</main>
+
+<!-- Detalle de un curso -->
+<div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div><h2 class="modal-title fs-5" id="cmTitle"></h2><div class="hint" id="cmSub"></div></div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3 mb-3" id="cmKpis"></div>
+        <ul class="nav nav-tabs mb-3" role="tablist">
+          <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cmPaneMods" type="button" role="tab" data-i18n="m.tabModules"></button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cmPaneAgents" type="button" role="tab" id="cmTabAgents"></button></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="cmPaneMods" role="tabpanel">
+            <div class="card mb-3">
+              <div class="card-header"><h3 class="card-title" data-i18n="m.chart"></h3><div class="card-sub" data-i18n="m.chartSub"></div></div>
+              <div class="card-body"><div class="chart-box" id="cmChartBox"><canvas id="chModules"></canvas></div></div>
+            </div>
+            <div class="card"><div class="card-body"><div class="table-responsive"><table class="table" id="tblModules"></table></div></div></div>
+          </div>
+          <div class="tab-pane fade" id="cmPaneAgents" role="tabpanel">
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+              <div class="btn-group btn-group-sm seg" role="group" id="cmStatusSeg"></div>
+              <input type="search" id="cmAgentSearch" class="form-control form-control-sm ms-auto" style="max-width: 240px" data-i18n-ph="m.searchAgent">
+            </div>
+            <div class="hint mb-2" data-i18n="m.agentHint"></div>
+            <div class="card"><div class="card-body"><div class="table-responsive"><table class="table table-hover" id="tblCourseAgents"></table></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ficha de agente -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="agentPanel" aria-labelledby="apName">
+  <div class="agent-head p-3">
+    <div class="d-flex align-items-start gap-2">
+      <div class="me-auto"><h2 class="fs-5 fw-semibold mb-0" id="apName"></h2><div class="hint" id="apSub"></div></div>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="meta-grid mt-3" id="apMeta"></div>
+  </div>
+  <div class="offcanvas-body">
+    <div class="row g-2 mb-3" id="apKpis"></div>
+    <div class="hint mb-2" data-i18n="p.note"></div>
+    <div id="apCourses"></div>
+    <div class="card mt-3" id="apGanttCard">
+      <div class="card-header"><h3 class="card-title" data-i18n="p.gantt"></h3><div class="card-sub" data-i18n="p.ganttSub"></div></div>
+      <div class="card-body">
+        <div class="chart-box" id="apGanttBox"><canvas id="chGantt"></canvas></div>
+        <div class="d-flex flex-wrap gap-3 hint mt-2 gantt-legend" id="apGanttLegend"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="training_liveDemo_data.js"></script>
+<script>
+/* Portfolio demo: replaces the Apps Script backend with the local anonymised sample */
+window.google = { script: { get run() {
+  let ok = () => {}, fail = () => {};
+  const api = {
+    withSuccessHandler(f) { ok = f; return api; },
+    withFailureHandler(f) { fail = f; return api; },
+    getDashboardData() { setTimeout(() => ok(JSON.stringify(window.DEMO_DATA)), 150); },
+    getAgentModules(p) { setTimeout(() => ok(JSON.stringify({ cols: window.DEMO_AGENT_COLS, rows: window.DEMO_AGENT_MODS[p] || [] })), 150); },
+    getPageData() {}, runUpdate() {}
+  };
+  return api;
+} } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const IS_ADMIN = false;
+const CURRENT_MONTH = '2026-10';
+const DEFAULT_FROM = '2026-01';
+const APP_URL = '';
+const APP_TITLE = document.title;
+const I18N = {
+  es: {
+    locale: 'es-ES', loading: 'Cargando datos de formación…', loadingSlow: 'Se están preparando los datos tras la última actualización. Solo pasa la primera vez.', loadError: 'No se han podido cargar los datos: {e}',
+    updated: 'Datos del {d}', noData: 'Sin datos cargados',
+    'tab.courses': 'Cursos', 'tab.agents': 'Agentes', 'tab.admin': 'Actualizar datos',
+    'f.from': 'Inicio del curso: desde', 'f.to': 'Hasta', 'f.site': 'Site', 'f.lob': 'LOB', 'f.client': 'Cliente', 'f.campaign': 'Campaña',
+    'f.course': 'Curso', 'f.role': 'Rol', 'f.status': 'Estado del curso', 'f.clear': 'Quitar filtros', 'f.all': 'Todos', 'f.empty': '(vacío)', 'f.agent': 'Agente', 'f.search': 'Escribe para buscar', 'f.searchAgent': 'Nombre, apellido o email', 'f.selectAll': 'Marcar todos', 'f.selectNone': 'Desmarcar todos', 'f.nSel': '{n} seleccionados', 'f.more': 'Y {n} más: escribe para acotar la lista.',
+    'k.courses': 'Cursos', 'k.active': 'Activos este mes', 'k.activeHelp': 'Con actividad en {m}', 'k.enrolls': 'Inscripciones',
+    'k.people': '{n} personas', 'k.completed': 'Completadas', 'k.ofTotal': '{a} de {b}', 'k.realHours': 'Horas reales',
+    'k.theoryHours': 'Teóricas: {h}', 'k.dev': 'Real vs teórico', 'k.devHelp': 'Desviación del tiempo dedicado',
+    'c.status': 'Estado de las inscripciones', 'c.statusSub': 'Una inscripción es una persona en un curso. Pulsa un estado para filtrar.',
+    'c.month': 'Horas por mes de inicio del curso', 'c.monthSub': 'Duración teórica frente a tiempo real dedicado. Pulsa un mes para filtrarlo.',
+    'c.site': 'Horas reales por site', 'c.siteSub': 'Pulsa una barra para filtrar por ese site.',
+    'c.group': 'Horas reales por línea de negocio', 'c.groupSub': 'Pulsa una barra para filtrar.',
+    'g.lob': 'LOB', 'g.client': 'Cliente', 'g.campaign': 'Campaña', 'l.real': 'Real', 'l.theory': 'Teórico', 'others': 'Otros ({n})',
+    't.courses': 'Cursos: duración teórica frente a real', 't.coursesSub': 'Pulsa un curso para ver el detalle por módulos y por agente.', 't.searchCourse': 'Buscar curso',
+    'col.course': 'Curso', 'col.start': 'Inicio', 'col.enrolled': 'Inscritos', 'col.status': 'Estado', 'col.progress': 'Progreso medio',
+    'col.theory': 'H. teóricas', 'col.real': 'H. reales', 'col.dev': 'Desviación', 'col.last': 'Última actividad', 'col.agent': 'Agente',
+    'col.module': 'Módulo', 'col.people': 'Personas', 'col.moduleStatus': 'Estado del módulo', 'col.completed': 'Completado',
+    'col.completedAt': 'Completado el', 'col.site': 'Site', 'col.campaign': 'Campaña', 'col.courses': 'Cursos', 'col.coursesStatus': 'Estado de sus cursos',
+    'col.courseStatus': 'Estado del curso', 'col.modules': 'Módulos', 'col.month': 'Mes', 'col.rows': 'Filas', 'col.missing': 'Filas sin HR ID',
+    'pctCompleted': '{p} completado', 'noCourses': 'Ningún curso coincide con los filtros.',
+    'm.start': 'Inicio: {d}.', 'm.note': 'Datos según los filtros activos.', 'm.tabModules': 'Módulos', 'm.tabAgents': 'Agentes inscritos',
+    'm.modules': 'Módulos', 'm.enrolled': 'Inscritos', 'm.courseCompleted': 'Curso completado', 'm.chart': 'Horas por módulo',
+    'm.chartSub': 'Teórico frente a real, sumando a todas las personas inscritas.', 'm.noModules': 'Sin módulos para los filtros activos.',
+    'm.searchAgent': 'Buscar agente', 'm.agentHint': 'Pulsa un agente para abrir su ficha completa.', 'm.noAgents': 'Ningún agente con este estado.',
+    'k.agents': 'Agentes', 'k.perAgent': 'Cursos por agente', 'k.perAgentHelp': 'Media de cursos asignados', 'k.allDone': 'Con todo completado',
+    'k.agentsN': '{n} agentes', 'k.pending': 'Con cursos pendientes', 'k.pendingHelp': 'Incompletos o no intentados',
+    'k.hoursPerAgent': 'Horas reales por agente', 'k.missing': 'Sin HR ID', 'k.missingHelp': 'No se pueden asignar a site ni campaña',
+    'a.bands': 'Agentes según su avance', 'a.bandsSub': 'Cursos completados sobre cursos asignados.', 'a.bandsAxis': 'Cursos completados sobre asignados', 'a.agentsTip': '{n} agentes',
+    'a.scatter': 'Tiempo real frente a teórico por agente', 'a.scatterSub': 'Cada punto es un agente. Sobre la diagonal, dedica más tiempo del previsto.',
+    'a.zoom': 'Escala', 'a.out': '{n} agentes quedan fuera de la escala actual.', 'theme.light': 'Cambiar a modo claro', 'theme.dark': 'Cambiar a modo oscuro', 'csv.btn': 'Descargar CSV', 'pdf.btn': 'Descargar PDF', 'pdf.working': 'Generando el PDF…', 'pdf.error': 'No se ha podido generar el PDF: {e}', 'pdf.file': 'dashboard_formacion', 'pdf.months': 'Inicio del curso', 'pdf.tableSearch': 'Búsqueda en la tabla', 'pdf.tableShow': 'Tabla', 'pdf.generated': 'Generado el {d}', 'pdf.noFilters': 'Sin filtros', 'pdf.page': 'Página {a} de {b}', 'csv.title': 'Descarga las {n} inscripciones que cumplen los filtros actuales', 'csv.file': 'training_demo', 'csv.cols': ['ID agente', 'Site', 'Nombre', 'Apellido', 'LOB', 'Cliente', 'Actividad', 'Campaña', 'Curso', 'Estado del curso', 'Avance (%)', 'Fecha inicio', 'Fecha fin / última actualización', 'Horas teóricas', 'Horas reales'], 'c.gantt': 'Calendario de cursos', 'c.ganttSub': 'Del inicio de cada curso a su última actividad. Pulsa un curso para filtrar todo el dashboard; vuelve a pulsarlo para quitar el filtro.', 'cg.done': 'Completado por todos', 'cg.progress': 'En curso', 'cg.none': 'Sin actividad', 'cg.enrolled': '{n} inscritos, {p} completado', 'f.searchCourse': 'Escribe para buscar un curso', 'f.noMatch': 'Nada coincide con la búsqueda.', 'p.gantt': 'Calendario de cursos', 'p.ganttSub': 'Del inicio del curso a su finalización. Si sigue en curso, hasta la última actividad.', 'g.start': 'Inicio: {d}', 'g.end': 'Completado: {d}', 'g.last': 'Última actividad: {d}', 'g.none': 'Sin actividad todavía', 'g.today': 'Hoy', 'a.x': 'Horas teóricas', 'a.y': 'Horas reales', 'a.scatterTip': '{n}: {r} h reales / {t} h teóricas',
+    't.agents': 'Detalle por agente', 't.agentsSub': 'Pulsa un agente para ver sus cursos y módulos.', 't.searchAgent': 'Buscar por nombre, email o ID',
+    'o.all': 'Todos los agentes', 'o.pending': 'Con cursos sin completar', 'o.missing': 'Sin HR ID',
+    'more': 'Mostrar más ({n} restantes)', 'noAgents': 'Ningún agente coincide con los filtros.', 'coursesDone': '{a} de {b} completados',
+    'p.assigned': 'Cursos asignados', 'p.completed': 'Completados', 'p.note': 'Cursos según los filtros activos. Pulsa un curso para ver sus módulos.',
+    'p.progress': 'Progreso {p}', 'p.start': 'Inicio {d}', 'p.theory': 'Teórico {h}', 'p.real': 'Real {h}', 'p.mods': 'Módulos {a}/{b}', 'p.role': 'Rol {r}',
+    'p.loadingMods': 'Cargando módulos…', 'p.noMods': 'No hay módulos registrados.', 'p.modsError': 'No se han podido cargar los módulos: {e}',
+    'p.noCourses': 'Sin cursos para los filtros activos.', 'meta.site': 'Site', 'meta.lob': 'LOB', 'meta.client': 'Cliente', 'meta.campaign': 'Campaña', 'meta.activity': 'Actividad',
+    'ad.access': 'Accesos al dashboard', 'ad.accessLink': 'Gestionar personas con acceso', 'ad.accessOn': 'En la hoja, cada permiso es una columna TRUE/FALSE: Dashboard (ver), Aggiorna dati (actualizar), Ricevi avvisi (email de cada carga) y Permessi attivi (activa o bloquea a la persona). Los cambios se aplican en 5 minutos como máximo.', 'ad.accessOff': 'Ahora puede entrar todo el dominio. Para limitarlo, pega el ID de la hoja de accesos en Config.gs (ACCESS_SHEET_ID).', 'ad.title': 'Actualizar datos', 'ad.update': 'Actualizar datos', 'ad.full': 'Recargar todos los ficheros',
+    'ad.helpUpdate': 'Lee solo los ficheros nuevos o modificados desde la última carga. Es la opción de uso diario.',
+    'ad.helpFull': 'Vuelve a leer todos los ficheros de la carpeta y rehace el histórico. Úsala si se ha borrado o sustituido un fichero, o si algo no cuadra.',
+    'ad.mail': 'Tarda uno o dos minutos. Recibiréis un email con el resultado.',
+    'ad.lastRun': 'Última ejecución', 'ad.byMonth': 'Datos cargados por mes', 'ad.launched': '{d}, lanzada por {u}.', 'ad.fullTag': ' (recarga completa)',
+    'ad.error': 'Error:', 'ad.noNew': 'No había ficheros nuevos.', 'ad.notLoaded': 'Ficheros no cargados', 'ad.warnings': 'Avisos',
+    'ad.never': 'Todavía no se ha ejecutado ninguna carga.', 'ad.running': 'Actualizando datos. No cierres esta página.',
+    'ad.done': 'Datos actualizados. El dashboard ya muestra la nueva información.', 'ad.failed': 'No se han podido actualizar los datos: {e}',
+    'ad.confirm': 'Se volverán a leer todos los ficheros de la carpeta. ¿Continuar?', 'ad.fileRows': '{f}: {n} filas (mes {m})',
+    'st.completato': 'Completado', 'st.incompleto': 'Incompleto', 'st.non tentato': 'No intentado', 'st.other': 'Otros', 'st.none': 'Sin estado',
+    'r.Studente': 'Alumno', 'r.Docente': 'Docente', 'r.none': 'Sin rol', 'noDate': 'Sin fecha'
+  },
+  en: {
+    locale: 'en-GB', loading: 'Loading training data…', loadingSlow: 'The data is being prepared after the last update. This only happens the first time.', loadError: 'The data could not be loaded: {e}',
+    updated: 'Data as of {d}', noData: 'No data loaded yet',
+    'tab.courses': 'Courses', 'tab.agents': 'Agents', 'tab.admin': 'Update data',
+    'f.from': 'Course start: from', 'f.to': 'To', 'f.site': 'Site', 'f.lob': 'LOB', 'f.client': 'Client', 'f.campaign': 'Campaign',
+    'f.course': 'Course', 'f.role': 'Role', 'f.status': 'Course status', 'f.clear': 'Clear filters', 'f.all': 'All', 'f.empty': '(empty)', 'f.agent': 'Agent', 'f.search': 'Type to search', 'f.searchAgent': 'First name, last name or email', 'f.selectAll': 'Select all', 'f.selectNone': 'Clear all', 'f.nSel': '{n} selected', 'f.more': 'And {n} more: type to narrow the list.',
+    'k.courses': 'Courses', 'k.active': 'Active this month', 'k.activeHelp': 'With activity in {m}', 'k.enrolls': 'Enrolments',
+    'k.people': '{n} people', 'k.completed': 'Completed', 'k.ofTotal': '{a} of {b}', 'k.realHours': 'Actual hours',
+    'k.theoryHours': 'Planned: {h}', 'k.dev': 'Actual vs planned', 'k.devHelp': 'Deviation in time spent',
+    'c.status': 'Enrolment status', 'c.statusSub': 'An enrolment is one person in one course. Click a status to filter.',
+    'c.month': 'Hours by course start month', 'c.monthSub': 'Planned duration versus actual time spent. Click a month to filter.',
+    'c.site': 'Actual hours by site', 'c.siteSub': 'Click a bar to filter by that site.',
+    'c.group': 'Actual hours by line of business', 'c.groupSub': 'Click a bar to filter.',
+    'g.lob': 'LOB', 'g.client': 'Client', 'g.campaign': 'Campaign', 'l.real': 'Actual', 'l.theory': 'Planned', 'others': 'Others ({n})',
+    't.courses': 'Courses: planned versus actual duration', 't.coursesSub': 'Click a course to see its modules and agents.', 't.searchCourse': 'Search course',
+    'col.course': 'Course', 'col.start': 'Start', 'col.enrolled': 'Enrolled', 'col.status': 'Status', 'col.progress': 'Average progress',
+    'col.theory': 'Planned h', 'col.real': 'Actual h', 'col.dev': 'Deviation', 'col.last': 'Last activity', 'col.agent': 'Agent',
+    'col.module': 'Module', 'col.people': 'People', 'col.moduleStatus': 'Module status', 'col.completed': 'Completed',
+    'col.completedAt': 'Completed on', 'col.site': 'Site', 'col.campaign': 'Campaign', 'col.courses': 'Courses', 'col.coursesStatus': 'Status of their courses',
+    'col.courseStatus': 'Course status', 'col.modules': 'Modules', 'col.month': 'Month', 'col.rows': 'Rows', 'col.missing': 'Rows without HR ID',
+    'pctCompleted': '{p} completed', 'noCourses': 'No courses match the filters.',
+    'm.start': 'Start: {d}.', 'm.note': 'Data based on the active filters.', 'm.tabModules': 'Modules', 'm.tabAgents': 'Enrolled agents',
+    'm.modules': 'Modules', 'm.enrolled': 'Enrolled', 'm.courseCompleted': 'Course completed', 'm.chart': 'Hours by module',
+    'm.chartSub': 'Planned versus actual, summed across everyone enrolled.', 'm.noModules': 'No modules for the active filters.',
+    'm.searchAgent': 'Search agent', 'm.agentHint': 'Click an agent to open their full profile.', 'm.noAgents': 'No agents with this status.',
+    'k.agents': 'Agents', 'k.perAgent': 'Courses per agent', 'k.perAgentHelp': 'Average courses assigned', 'k.allDone': 'All completed',
+    'k.agentsN': '{n} agents', 'k.pending': 'With pending courses', 'k.pendingHelp': 'Incomplete or not attempted',
+    'k.hoursPerAgent': 'Actual hours per agent', 'k.missing': 'Without HR ID', 'k.missingHelp': 'Cannot be assigned to a site or campaign',
+    'a.bands': 'Agents by progress', 'a.bandsSub': 'Completed courses over assigned courses.', 'a.bandsAxis': 'Completed over assigned courses', 'a.agentsTip': '{n} agents',
+    'a.scatter': 'Actual versus planned time per agent', 'a.scatterSub': 'Each dot is an agent. Above the diagonal, they spend more time than planned.',
+    'a.zoom': 'Scale', 'a.out': '{n} agents are outside the current scale.', 'theme.light': 'Switch to light mode', 'theme.dark': 'Switch to dark mode', 'csv.btn': 'Download CSV', 'pdf.btn': 'Download PDF', 'pdf.working': 'Generating the PDF…', 'pdf.error': 'The PDF could not be generated: {e}', 'pdf.file': 'training_dashboard', 'pdf.months': 'Course start', 'pdf.tableSearch': 'Table search', 'pdf.tableShow': 'Table', 'pdf.generated': 'Generated on {d}', 'pdf.noFilters': 'No filters', 'pdf.page': 'Page {a} of {b}', 'csv.title': 'Download the {n} enrolments that match the current filters', 'csv.file': 'training_demo', 'csv.cols': ['Agent ID', 'Site', 'First name', 'Last name', 'LOB', 'Client', 'Activity', 'Campaign', 'Course', 'Course status', 'Progress (%)', 'Start date', 'End date / last update', 'Planned hours', 'Actual hours'], 'c.gantt': 'Course timeline', 'c.ganttSub': 'From each course start to its latest activity. Click a course to filter the whole dashboard; click it again to clear the filter.', 'cg.done': 'Completed by everyone', 'cg.progress': 'In progress', 'cg.none': 'No activity', 'cg.enrolled': '{n} enrolled, {p} completed', 'f.searchCourse': 'Type to search a course', 'f.noMatch': 'Nothing matches your search.', 'p.gantt': 'Course timeline', 'p.ganttSub': 'From course start to completion. If still in progress, up to the last activity.', 'g.start': 'Start: {d}', 'g.end': 'Completed: {d}', 'g.last': 'Last activity: {d}', 'g.none': 'No activity yet', 'g.today': 'Today', 'a.x': 'Planned hours', 'a.y': 'Actual hours', 'a.scatterTip': '{n}: {r} h actual / {t} h planned',
+    't.agents': 'Agent detail', 't.agentsSub': 'Click an agent to see their courses and modules.', 't.searchAgent': 'Search by name, email or ID',
+    'o.all': 'All agents', 'o.pending': 'With uncompleted courses', 'o.missing': 'Without HR ID',
+    'more': 'Show more ({n} remaining)', 'noAgents': 'No agents match the filters.', 'coursesDone': '{a} of {b} completed',
+    'p.assigned': 'Assigned courses', 'p.completed': 'Completed', 'p.note': 'Courses based on the active filters. Click a course to see its modules.',
+    'p.progress': 'Progress {p}', 'p.start': 'Start {d}', 'p.theory': 'Planned {h}', 'p.real': 'Actual {h}', 'p.mods': 'Modules {a}/{b}', 'p.role': 'Role {r}',
+    'p.loadingMods': 'Loading modules…', 'p.noMods': 'No modules recorded.', 'p.modsError': 'The modules could not be loaded: {e}',
+    'p.noCourses': 'No courses for the active filters.', 'meta.site': 'Site', 'meta.lob': 'LOB', 'meta.client': 'Client', 'meta.campaign': 'Campaign', 'meta.activity': 'Activity',
+    'ad.access': 'Dashboard access', 'ad.accessLink': 'Manage who has access', 'ad.accessOn': 'In the sheet each permission is a TRUE/FALSE column: Dashboard (view), Aggiorna dati (update), Ricevi avvisi (email after each load) and Permessi attivi (enables or blocks the person). Changes apply within 5 minutes.', 'ad.accessOff': 'Anyone in the domain can open it right now. To restrict it, paste the access sheet ID into Config.gs (ACCESS_SHEET_ID).', 'ad.title': 'Update data', 'ad.update': 'Update data', 'ad.full': 'Reload all files',
+    'ad.helpUpdate': 'Reads only files that are new or changed since the last load. Use this day to day.',
+    'ad.helpFull': 'Reads every file in the folder again and rebuilds the history. Use it if a file was deleted or replaced, or if something looks wrong.',
+    'ad.mail': 'It takes one or two minutes. You will get an email with the result.',
+    'ad.lastRun': 'Last run', 'ad.byMonth': 'Loaded data by month', 'ad.launched': '{d}, started by {u}.', 'ad.fullTag': ' (full reload)',
+    'ad.error': 'Error:', 'ad.noNew': 'There were no new files.', 'ad.notLoaded': 'Files not loaded', 'ad.warnings': 'Warnings',
+    'ad.never': 'No load has been run yet.', 'ad.running': 'Updating data. Keep this page open.',
+    'ad.done': 'Data updated. The dashboard now shows the new information.', 'ad.failed': 'The data could not be updated: {e}',
+    'ad.confirm': 'Every file in the folder will be read again. Continue?', 'ad.fileRows': '{f}: {n} rows (month {m})',
+    'st.completato': 'Completed', 'st.incompleto': 'Incomplete', 'st.non tentato': 'Not attempted', 'st.other': 'Other', 'st.none': 'No status',
+    'r.Studente': 'Student', 'r.Docente': 'Teacher', 'r.none': 'No role', 'noDate': 'No date'
+  },
+  it: {
+    locale: 'it-IT', loading: 'Caricamento dei dati di formazione…', loadingSlow: 'I dati vengono preparati dopo l’ultimo aggiornamento. Succede solo la prima volta.', loadError: 'Impossibile caricare i dati: {e}',
+    updated: 'Dati del {d}', noData: 'Nessun dato caricato',
+    'tab.courses': 'Corsi', 'tab.agents': 'Agenti', 'tab.admin': 'Aggiorna dati',
+    'f.from': 'Inizio corso: da', 'f.to': 'A', 'f.site': 'Site', 'f.lob': 'LOB', 'f.client': 'Cliente', 'f.campaign': 'Campagna',
+    'f.course': 'Corso', 'f.role': 'Ruolo', 'f.status': 'Stato del corso', 'f.clear': 'Rimuovi filtri', 'f.all': 'Tutti', 'f.empty': '(vuoto)', 'f.agent': 'Agente', 'f.search': 'Scrivi per cercare', 'f.searchAgent': 'Nome, cognome o email', 'f.selectAll': 'Seleziona tutti', 'f.selectNone': 'Deseleziona tutti', 'f.nSel': '{n} selezionati', 'f.more': 'E altri {n}: scrivi per restringere l’elenco.',
+    'k.courses': 'Corsi', 'k.active': 'Attivi questo mese', 'k.activeHelp': 'Con attività a {m}', 'k.enrolls': 'Iscrizioni',
+    'k.people': '{n} persone', 'k.completed': 'Completate', 'k.ofTotal': '{a} su {b}', 'k.realHours': 'Ore effettive',
+    'k.theoryHours': 'Previste: {h}', 'k.dev': 'Effettivo vs previsto', 'k.devHelp': 'Scostamento del tempo dedicato',
+    'c.status': 'Stato delle iscrizioni', 'c.statusSub': 'Un’iscrizione è una persona in un corso. Clicca uno stato per filtrare.',
+    'c.month': 'Ore per mese di inizio corso', 'c.monthSub': 'Durata prevista rispetto al tempo effettivo. Clicca un mese per filtrarlo.',
+    'c.site': 'Ore effettive per site', 'c.siteSub': 'Clicca una barra per filtrare per quel site.',
+    'c.group': 'Ore effettive per linea di business', 'c.groupSub': 'Clicca una barra per filtrare.',
+    'g.lob': 'LOB', 'g.client': 'Cliente', 'g.campaign': 'Campagna', 'l.real': 'Effettivo', 'l.theory': 'Previsto', 'others': 'Altri ({n})',
+    't.courses': 'Corsi: durata prevista rispetto a quella effettiva', 't.coursesSub': 'Clicca un corso per vedere moduli e agenti.', 't.searchCourse': 'Cerca corso',
+    'col.course': 'Corso', 'col.start': 'Inizio', 'col.enrolled': 'Iscritti', 'col.status': 'Stato', 'col.progress': 'Avanzamento medio',
+    'col.theory': 'Ore previste', 'col.real': 'Ore effettive', 'col.dev': 'Scostamento', 'col.last': 'Ultima attività', 'col.agent': 'Agente',
+    'col.module': 'Modulo', 'col.people': 'Persone', 'col.moduleStatus': 'Stato del modulo', 'col.completed': 'Completato',
+    'col.completedAt': 'Completato il', 'col.site': 'Site', 'col.campaign': 'Campagna', 'col.courses': 'Corsi', 'col.coursesStatus': 'Stato dei suoi corsi',
+    'col.courseStatus': 'Stato del corso', 'col.modules': 'Moduli', 'col.month': 'Mese', 'col.rows': 'Righe', 'col.missing': 'Righe senza HR ID',
+    'pctCompleted': '{p} completato', 'noCourses': 'Nessun corso corrisponde ai filtri.',
+    'm.start': 'Inizio: {d}.', 'm.note': 'Dati secondo i filtri attivi.', 'm.tabModules': 'Moduli', 'm.tabAgents': 'Agenti iscritti',
+    'm.modules': 'Moduli', 'm.enrolled': 'Iscritti', 'm.courseCompleted': 'Corso completato', 'm.chart': 'Ore per modulo',
+    'm.chartSub': 'Previsto rispetto a effettivo, sommando tutte le persone iscritte.', 'm.noModules': 'Nessun modulo per i filtri attivi.',
+    'm.searchAgent': 'Cerca agente', 'm.agentHint': 'Clicca un agente per aprire la sua scheda completa.', 'm.noAgents': 'Nessun agente con questo stato.',
+    'k.agents': 'Agenti', 'k.perAgent': 'Corsi per agente', 'k.perAgentHelp': 'Media dei corsi assegnati', 'k.allDone': 'Tutto completato',
+    'k.agentsN': '{n} agenti', 'k.pending': 'Con corsi in sospeso', 'k.pendingHelp': 'Incompleti o non tentati',
+    'k.hoursPerAgent': 'Ore effettive per agente', 'k.missing': 'Senza HR ID', 'k.missingHelp': 'Non assegnabili a site o campagna',
+    'a.bands': 'Agenti per avanzamento', 'a.bandsSub': 'Corsi completati sui corsi assegnati.', 'a.bandsAxis': 'Corsi completati su assegnati', 'a.agentsTip': '{n} agenti',
+    'a.scatter': 'Tempo effettivo rispetto al previsto per agente', 'a.scatterSub': 'Ogni punto è un agente. Sopra la diagonale, dedica più tempo del previsto.',
+    'a.zoom': 'Scala', 'a.out': '{n} agenti sono fuori dalla scala attuale.', 'theme.light': 'Passa alla modalità chiara', 'theme.dark': 'Passa alla modalità scura', 'csv.btn': 'Scarica CSV', 'pdf.btn': 'Scarica PDF', 'pdf.working': 'Generazione del PDF…', 'pdf.error': 'Impossibile generare il PDF: {e}', 'pdf.file': 'dashboard_formazione', 'pdf.months': 'Inizio del corso', 'pdf.tableSearch': 'Ricerca nella tabella', 'pdf.tableShow': 'Tabella', 'pdf.generated': 'Generato il {d}', 'pdf.noFilters': 'Nessun filtro', 'pdf.page': 'Pagina {a} di {b}', 'csv.title': 'Scarica le {n} iscrizioni che corrispondono ai filtri attuali', 'csv.file': 'training_demo', 'csv.cols': ['ID agente', 'Site', 'Nome', 'Cognome', 'LOB', 'Cliente', 'Attività', 'Campagna', 'Corso', 'Stato del corso', 'Avanzamento (%)', 'Data inizio', 'Data fine / ultimo aggiornamento', 'Ore previste', 'Ore effettive'], 'c.gantt': 'Calendario dei corsi', 'c.ganttSub': 'Dall’inizio di ogni corso alla sua ultima attività. Clicca un corso per filtrare tutto il dashboard; cliccalo di nuovo per rimuovere il filtro.', 'cg.done': 'Completato da tutti', 'cg.progress': 'In corso', 'cg.none': 'Nessuna attività', 'cg.enrolled': '{n} iscritti, {p} completato', 'f.searchCourse': 'Scrivi per cercare un corso', 'f.noMatch': 'Nessun risultato per questa ricerca.', 'p.gantt': 'Calendario dei corsi', 'p.ganttSub': 'Dall’inizio del corso al completamento. Se è ancora in corso, fino all’ultima attività.', 'g.start': 'Inizio: {d}', 'g.end': 'Completato: {d}', 'g.last': 'Ultima attività: {d}', 'g.none': 'Nessuna attività', 'g.today': 'Oggi', 'a.x': 'Ore previste', 'a.y': 'Ore effettive', 'a.scatterTip': '{n}: {r} h effettive / {t} h previste',
+    't.agents': 'Dettaglio per agente', 't.agentsSub': 'Clicca un agente per vedere i suoi corsi e moduli.', 't.searchAgent': 'Cerca per nome, email o ID',
+    'o.all': 'Tutti gli agenti', 'o.pending': 'Con corsi non completati', 'o.missing': 'Senza HR ID',
+    'more': 'Mostra altri ({n} rimanenti)', 'noAgents': 'Nessun agente corrisponde ai filtri.', 'coursesDone': '{a} su {b} completati',
+    'p.assigned': 'Corsi assegnati', 'p.completed': 'Completati', 'p.note': 'Corsi secondo i filtri attivi. Clicca un corso per vedere i suoi moduli.',
+    'p.progress': 'Avanzamento {p}', 'p.start': 'Inizio {d}', 'p.theory': 'Previsto {h}', 'p.real': 'Effettivo {h}', 'p.mods': 'Moduli {a}/{b}', 'p.role': 'Ruolo {r}',
+    'p.loadingMods': 'Caricamento moduli…', 'p.noMods': 'Nessun modulo registrato.', 'p.modsError': 'Impossibile caricare i moduli: {e}',
+    'p.noCourses': 'Nessun corso per i filtri attivi.', 'meta.site': 'Site', 'meta.lob': 'LOB', 'meta.client': 'Cliente', 'meta.campaign': 'Campagna', 'meta.activity': 'Attività',
+    'ad.access': 'Accessi al dashboard', 'ad.accessLink': 'Gestisci chi ha accesso', 'ad.accessOn': 'Nel foglio ogni permesso è una colonna TRUE/FALSE: Dashboard (visualizzare), Aggiorna dati (aggiornare), Ricevi avvisi (email di ogni caricamento) e Permessi attivi (attiva o blocca la persona). Le modifiche si applicano entro 5 minuti.', 'ad.accessOff': 'Al momento può entrare tutto il dominio. Per limitarlo, incolla l’ID del foglio accessi in Config.gs (ACCESS_SHEET_ID).', 'ad.title': 'Aggiorna dati', 'ad.update': 'Aggiorna dati', 'ad.full': 'Ricarica tutti i file',
+    'ad.helpUpdate': 'Legge solo i file nuovi o modificati dall’ultimo caricamento. È l’opzione di uso quotidiano.',
+    'ad.helpFull': 'Rilegge tutti i file della cartella e ricostruisce lo storico. Usala se un file è stato eliminato o sostituito, o se qualcosa non torna.',
+    'ad.mail': 'Richiede uno o due minuti. Riceverete un’email con il risultato.',
+    'ad.lastRun': 'Ultima esecuzione', 'ad.byMonth': 'Dati caricati per mese', 'ad.launched': '{d}, avviata da {u}.', 'ad.fullTag': ' (ricarica completa)',
+    'ad.error': 'Errore:', 'ad.noNew': 'Non c’erano file nuovi.', 'ad.notLoaded': 'File non caricati', 'ad.warnings': 'Avvisi',
+    'ad.never': 'Non è ancora stato eseguito nessun caricamento.', 'ad.running': 'Aggiornamento in corso. Non chiudere questa pagina.',
+    'ad.done': 'Dati aggiornati. Il dashboard mostra già le nuove informazioni.', 'ad.failed': 'Impossibile aggiornare i dati: {e}',
+    'ad.confirm': 'Tutti i file della cartella verranno riletti. Continuare?', 'ad.fileRows': '{f}: {n} righe (mese {m})',
+    'st.completato': 'Completato', 'st.incompleto': 'Incompleto', 'st.non tentato': 'Non tentato', 'st.other': 'Altri', 'st.none': 'Senza stato',
+    'r.Studente': 'Studente', 'r.Docente': 'Docente', 'r.none': 'Senza ruolo', 'noDate': 'Senza data'
+  }
+};
+
+</script>
+<script>
+/* =================================================================== */
+/* Idioma                                                              */
+/* =================================================================== */
+let LANG = 'es';
+/* Texto legible de cualquier error que devuelva google.script.run */
+function errText(err) {
+  if (!err) return '?';
+  if (typeof err === 'string') return err;
+  if (err.message) return err.message;
+  try { const j = JSON.stringify(err); if (j && j !== '{}') return j; } catch (e) {}
+  return String(err);
+}
+const t = (key, p) => {
+  let s = (I18N[LANG] && I18N[LANG][key]) || I18N.es[key] || key;
+  if (p) Object.keys(p).forEach(k => { s = s.split('{' + k + '}').join(p[k] === undefined || p[k] === null ? '' : String(p[k])); });
+  return s;
+};
+function detectLang() {
+  try { const saved = localStorage.getItem('training_demo_lang'); if (saved && I18N[saved]) return saved; } catch (e) {}
+  const nav = (navigator.language || 'es').slice(0, 2).toLowerCase();
+  return I18N[nav] ? nav : 'es';
+}
+function applyStatic() {
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('input[name="lang"]').forEach(r => { r.checked = r.value === LANG; });
+  applyTheme(document.documentElement.getAttribute('data-bs-theme'));
+  updateHeaderDate();
+}
+function getTheme() {
+  try { const v = localStorage.getItem('training_demo_theme'); if (v === 'light' || v === 'dark') return v; } catch (e) {}
+  return 'dark';
+}
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-bs-theme', theme);
+  $('themeIcon').className = 'bi ' + (theme === 'dark' ? 'bi-sun' : 'bi-moon');
+  $('btnTheme').title = t(theme === 'dark' ? 'theme.light' : 'theme.dark');
+  $('btnTheme').setAttribute('aria-label', $('btnTheme').title);
+}
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem('training_demo_theme', next); } catch (e) {}
+  applyTheme(next);
+  track('change_theme', { theme: next });
+  chartDefaults();
+  Object.keys(S.charts).forEach(k => { S.charts[k].destroy(); delete S.charts[k]; });
+  if (S.enroll.length && S.view !== 'admin') renderAll();
+  if (S.openCourse && $('courseModal').classList.contains('show')) openCourse(S.openCourse, true);
+  if (S.openAgent && $('agentPanel').classList.contains('show')) openAgent(S.openAgent, true);
+}
+
+function setLang(l) {
+  LANG = I18N[l] ? l : 'es';
+  try { localStorage.setItem('training_demo_lang', LANG); } catch (e) {}
+  track('change_language', { language: LANG });
+  makeFormatters();
+  applyStatic();
+  if (S.enroll.length) {
+    if (S.view !== 'admin') renderAll();
+    if (S.openCourse && $('courseModal').classList.contains('show')) openCourse(S.openCourse, true);
+    if (S.openAgent && $('agentPanel').classList.contains('show')) openAgent(S.openAgent, true);
+  }
+  if (IS_ADMIN && S.page) renderAdmin(S.page);
+}
+
+/* =================================================================== */
+/* Estado y utilidades                                                 */
+/* =================================================================== */
+const S = {
+  version: null, enroll: [], mods: [], missing: 'Missing HR ID', page: null,
+  // Filtros de lista: array con los valores marcados (vacío = todos)
+  f: { from: '', to: '', site: [], lob: [], client: [], campaign: [], corso: [], rol: [], estado: [], persona: [] },
+  names: {},
+  view: 'cursos', group: 'lob',
+  courseSort: { key: 'real', dir: -1 }, courseSearch: '',
+  agentSort: { key: 'cursos', dir: -1 }, agentSearch: '', agentOnly: '', agentLimit: 50,
+  cmSort: { key: 'nombre', dir: 1 }, cmStatus: '', cmSearch: '', scatterZoom: 100, lastAgents: [],
+  openCourse: null, openAgent: null, agentMods: {}, charts: {}
+};
+const STATUS_KEYS = ['completato', 'incompleto', 'non tentato'];
+const STATUS_STYLE = { 'completato': ['s-ok', 'badge-ok', '--ok'], 'incompleto': ['s-inc', 'badge-inc', '--inc'], 'non tentato': ['s-nt', 'badge-nt', '--nt'] };
+
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let nf0, nf1;
+function makeFormatters() {
+  nf0 = new Intl.NumberFormat(t('locale'), { maximumFractionDigits: 0 });
+  nf1 = new Intl.NumberFormat(t('locale'), { maximumFractionDigits: 1 });
+}
+const fmtN = n => nf0.format(n || 0);
+const fmtH = min => nf1.format((min || 0) / 60) + ' h';
+const hours = min => Math.round((min || 0) / 6) / 10;
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+const fmtPct = (a, b) => b ? pct(a, b) + '%' : '–';
+const statusLabel = s => s ? (STATUS_STYLE[s] ? t('st.' + s) : s) : t('st.none');
+const roleLabel = r => r ? (I18N.es['r.' + r] ? t('r.' + r) : r) : t('r.none');
+const validDate = iso => iso && !isNaN(new Date(iso));
+const monthLabel = ym => {
+  if (!ym) return t('noDate');
+  const [y, m] = ym.split('-').map(Number);
+  const s = new Date(y, m - 1, 1).toLocaleString(t('locale'), { month: 'short', year: 'numeric' });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+const dateLabel = iso => validDate(iso) ? new Date(iso).toLocaleString(t('locale'), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '–';
+const dayLabel = iso => validDate(iso) ? new Date(iso).toLocaleDateString(t('locale'), { day: 'numeric', month: 'short', year: 'numeric' }) : '–';
+const natural = (a, b) => String(a || '').localeCompare(String(b || ''), 'es', { numeric: true, sensitivity: 'base' });
+
+function devHtml(real, teor) {
+  if (!teor) return '<span class="text-secondary">–</span>';
+  const d = Math.round((real / teor - 1) * 100);
+  return '<span class="' + (d > 0 ? 'dev-up' : 'dev-down') + '">' + (d > 0 ? '+' : '') + d + '%</span>';
+}
+function stackHtml(ok, inc, nt) {
+  const tot = ok + inc + nt || 1;
+  return '<div class="stack" title="' + esc(statusLabel('completato') + ' ' + ok + ', ' + statusLabel('incompleto') + ' ' + inc + ', ' + statusLabel('non tentato') + ' ' + nt) + '">' +
+    '<span class="s-ok" style="width:' + (ok / tot * 100) + '%"></span><span class="s-inc" style="width:' + (inc / tot * 100) + '%"></span><span class="s-nt" style="width:' + (nt / tot * 100) + '%"></span></div>';
+}
+function badge(estado) {
+  const st = STATUS_STYLE[estado];
+  return '<span class="badge badge-st ' + (st ? st[1] : 'badge-nt') + '">' + esc(statusLabel(estado)) + '</span>';
+}
+const missingBadge = () => '<span class="badge badge-st badge-miss">' + esc(S.missing) + '</span>';
+function progressMini(p) {
+  const v = Math.round((p || 0) * 100);
+  return '<div class="progress progress-mini" role="progressbar" aria-valuenow="' + v + '" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:' + v + '%"></div></div>' + v + '%';
+}
+function kpi(value, label, help, main) {
+  return '<div class="col-6 col-md-4 col-xl-2"><div class="card kpi' + (main ? ' kpi-main' : '') + '"><div class="v">' + value + '</div><div class="l">' + label + '</div>' + (help ? '<div class="h">' + help + '</div>' : '') + '</div></div>';
+}
+function toObjects(block) {
+  const cols = block.cols;
+  const dicts = block.dicts || {};
+  const dec = cols.map(c => dicts[c] || null);
+  return block.rows.map(r => {
+    const o = {};
+    cols.forEach((c, i) => { const v = r[i]; o[c] = (dec[i] && v !== null && v !== undefined) ? dec[i][v] : v; });
+    return o;
+  });
+}
+function updateHeaderDate() {
+  $('updatedAt').textContent = validDate(S.version) ? t('updated', { d: dateLabel(S.version) }) : (S.enroll.length ? '' : t('noData'));
+}
+
+/* =================================================================== */
+/* Filtros                                                             */
+/* =================================================================== */
+// Filtros de lista. "persona" (agente) solo se muestra y se aplica en la vista Agentes.
+const FILTER_KEYS = ['site', 'lob', 'client', 'campaign', 'corso', 'rol', 'estado', 'persona'];
+
+function passes(r, except, isModule) {
+  const f = S.f;
+  if (f.from && (!r.mes || r.mes < f.from)) return false;
+  if (f.to && (!r.mes || r.mes > f.to)) return false;
+  for (const k of FILTER_KEYS) {
+    if (k === except || !f[k].length) continue;
+    if (isModule && (k === 'estado' || k === 'persona')) continue;
+    if (k === 'persona' && S.view !== 'agentes') continue;
+    if (!f[k].includes(r[k] || '')) return false;
+  }
+  return true;
+}
+const filteredEnroll = () => S.enroll.filter(r => passes(r));
+const filteredMods = () => S.mods.filter(r => passes(r, null, true));
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+/* ---------------- Filtros de selección múltiple ----------------
+ * Cada filtro abre un desplegable con buscador y casillas. Sin nada marcado = todos.
+ * Para quitar solo algunos valores: "Marcar todos" y desmarcar los que sobren. */
+const MF_MAX = 300; // opciones pintadas como máximo (hay miles de agentes); el resto aparece al buscar
+S.mc = { key: null, q: '', active: 0, items: [], matches: [], before: '' };
+S.opts = {};
+
+function optionLabel(key, v) {
+  if (key === 'rol') return roleLabel(v);
+  if (key === 'estado') return statusLabel(v);
+  if (key === 'persona') return S.names[v] || v;
+  return v || t('f.empty');
+}
+function fillFilter(key) {
+  const sel = S.f[key];
+  const counts = {};
+  S.enroll.filter(r => passes(r, key)).forEach(r => { const v = r[key] || ''; counts[v] = (counts[v] || 0) + 1; });
+  sel.forEach(v => { if (!(v in counts)) counts[v] = 0; });
+  S.opts[key] = Object.keys(counts).map(v => ({ v: v, n: counts[v], label: optionLabel(key, v) })).sort((a, b) => natural(a.label, b.label));
+  const btn = $('mf-' + key);
+  btn.firstChild.textContent = !sel.length ? t('f.all') : sel.length === 1 ? optionLabel(key, sel[0]) : t('f.nSel', { n: fmtN(sel.length) });
+  btn.title = sel.map(v => optionLabel(key, v)).join(', ');
+  btn.classList.toggle('is-set', sel.length > 0);
+  if (S.mc.key === key) renderMultiList();
+}
+function renderMultiList() {
+  const key = S.mc.key;
+  if (!key) return;
+  const sel = S.f[key];
+  // Cada palabra escrita debe aparecer (en cualquier orden; "_", "-" y "." cuentan como espacio)
+  const words = norm(S.mc.q).split(/[\s_\-./]+/).filter(Boolean);
+  const text = o => norm(key === 'persona' ? o.label + ' ' + o.v : o.label).replace(/[_\-./]+/g, ' ');
+  const matches = (S.opts[key] || []).filter(o => words.every(w => text(o).includes(w)));
+  const shown = matches.slice(0, MF_MAX);
+  S.mc.matches = matches; S.mc.items = shown;
+  S.mc.active = Math.min(Math.max(S.mc.active, 0), shown.length - 1);
+  const list = $('mfList'), top = list.scrollTop;
+  list.innerHTML = shown.map((o, i) => {
+    const on = sel.includes(o.v);
+    return '<div class="combo-opt' + (i === S.mc.active ? ' active' : '') + '" role="option" id="mopt-' + i + '" data-i="' + i + '" aria-selected="' + on + '">' +
+      '<input type="checkbox" class="form-check-input" tabindex="-1"' + (on ? ' checked' : '') + '>' +
+      '<span class="lbl">' + esc(o.label) + (key === 'persona' && o.label !== o.v ? '<span class="sub">' + esc(o.v) + '</span>' : '') + '</span>' +
+      '<span class="n">' + fmtN(o.n) + '</span></div>';
+  }).join('') +
+    (matches.length > MF_MAX ? '<div class="combo-empty">' + t('f.more', { n: fmtN(matches.length - MF_MAX) }) + '</div>' : '') +
+    (!matches.length ? '<div class="combo-empty">' + t('f.noMatch') + '</div>' : '');
+  list.scrollTop = top;
+  $('mfCount').textContent = sel.length ? t('f.nSel', { n: fmtN(sel.length) }) : t('f.all');
+  $('mfSearch').setAttribute('aria-activedescendant', 'mopt-' + S.mc.active);
+}
+function openMulti(key) {
+  closeMulti();
+  const btn = $('mf-' + key), pop = $('mfPop');
+  S.mc.key = key; S.mc.q = ''; S.mc.active = 0; S.mc.before = JSON.stringify(S.f[key]);
+  btn.parentNode.appendChild(pop);
+  pop.style.left = ''; pop.style.right = '';
+  pop.classList.remove('d-none');
+  if (pop.getBoundingClientRect().right > document.documentElement.clientWidth - 8) { pop.style.left = 'auto'; pop.style.right = '0'; }
+  btn.setAttribute('aria-expanded', 'true');
+  $('mfSearch').value = '';
+  $('mfSearch').placeholder = t(key === 'corso' ? 'f.searchCourse' : key === 'persona' ? 'f.searchAgent' : 'f.search');
+  $('mfList').scrollTop = 0;
+  renderMultiList();
+  $('mfSearch').focus();
+}
+function closeMulti(focusBtn) {
+  const key = S.mc.key;
+  if (!key) return;
+  S.mc.key = null;
+  $('mfPop').classList.add('d-none');
+  $('mf-' + key).setAttribute('aria-expanded', 'false');
+  if (JSON.stringify(S.f[key]) !== S.mc.before) trackFilter(key);
+  if (focusBtn) $('mf-' + key).focus();
+}
+function toggleMulti(i) {
+  const o = S.mc.items[i];
+  if (!o) return;
+  const sel = S.f[S.mc.key], pos = sel.indexOf(o.v);
+  if (pos === -1) sel.push(o.v); else sel.splice(pos, 1);
+  S.mc.active = i;
+  renderAll();
+}
+/** "Marcar todos" / "Desmarcar todos" actúan sobre lo que coincide con la búsqueda (o sobre todo si no se busca nada). */
+function bulkMulti(on) {
+  const key = S.mc.key;
+  if (!key) return;
+  const vals = S.mc.matches.map(o => o.v);
+  if (on) vals.forEach(v => { if (!S.f[key].includes(v)) S.f[key].push(v); });
+  else S.f[key] = S.mc.q ? S.f[key].filter(v => !vals.includes(v)) : [];
+  renderAll();
+}
+function bindMulti() {
+  document.querySelectorAll('[data-mf]').forEach(w => {
+    const key = w.dataset.mf;
+    w.innerHTML = '<button type="button" class="form-select form-select-sm combo-btn" id="mf-' + key + '" aria-haspopup="listbox" aria-expanded="false"><span></span></button>';
+    $('mf-' + key).addEventListener('click', () => S.mc.key === key ? closeMulti() : openMulti(key));
+  });
+  $('mfSearch').addEventListener('input', e => { S.mc.q = e.target.value; S.mc.active = 0; $('mfList').scrollTop = 0; renderMultiList(); });
+  $('mfSearch').addEventListener('keydown', e => {
+    const move = d => { e.preventDefault(); S.mc.active += d; renderMultiList(); const a = $('mopt-' + S.mc.active); if (a) a.scrollIntoView({ block: 'nearest' }); };
+    if (e.key === 'ArrowDown') move(1);
+    else if (e.key === 'ArrowUp') move(-1);
+    else if (e.key === 'Enter') { e.preventDefault(); toggleMulti(S.mc.active); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeMulti(true); }
+  });
+  $('mfList').addEventListener('mousedown', e => e.preventDefault());
+  $('mfList').addEventListener('click', e => { const o = e.target.closest('.combo-opt'); if (o) toggleMulti(Number(o.dataset.i)); });
+  $('mfAll').addEventListener('click', () => bulkMulti(true));
+  $('mfNone').addEventListener('click', () => bulkMulti(false));
+  document.addEventListener('mousedown', e => { if (S.mc.key && !$('mfPop').parentNode.contains(e.target)) closeMulti(); });
+}
+
+function fillMonths() {
+  const months = [...new Set(S.enroll.map(r => r.mes).filter(Boolean))].sort();
+  const opt = sel => '<option value="">' + t('f.all') + '</option>' + months.map(m => '<option value="' + m + '"' + (m === sel ? ' selected' : '') + '>' + monthLabel(m) + '</option>').join('');
+  $('fFrom').innerHTML = opt(S.f.from); $('fTo').innerHTML = opt(S.f.to);
+  $('fFrom').classList.toggle('is-set', !!S.f.from); $('fTo').classList.toggle('is-set', !!S.f.to);
+  $('fFrom').title = S.f.from ? monthLabel(S.f.from) : ''; $('fTo').title = S.f.to ? monthLabel(S.f.to) : '';
+}
+/* ---------------- Analítica (Google Analytics 4) ----------------
+ * Nunca se envían datos personales (nombres, emails, IDs de agente): solo qué se usa del dashboard. */
+function track(name, params) {
+  if (typeof gtag !== 'function') return;
+  try { gtag('event', name, Object.assign({ language: LANG }, params || {})); } catch (e) {}
+}
+function trackPage(view) {
+  track('page_view', { page_title: APP_TITLE + ' - ' + view, page_location: (APP_URL || location.href.split('#')[0]) + '#' + view, view_name: view });
+}
+
+/* ---------------- Descarga CSV (datos ya trabajados, con los filtros activos) ----------------
+ * Español e italiano: separador ";" y decimales con coma, para que Excel lo abra directamente en columnas.
+ * Inglés: separador "," y decimales con punto. Se añade BOM para que Excel respete los acentos. */
+function downloadCsv() {
+  const rows = filteredEnroll().slice().sort((a, b) => natural(a.corso, b.corso) || natural(a.nombre, b.nombre));
+  const sep = LANG === 'en' ? ',' : ';';
+  const dec = LANG === 'en' ? '.' : ',';
+  const num = v => (v === null || v === undefined || v === '') ? '' : String(Math.round(v * 100) / 100).replace('.', dec);
+  const cell = v => {
+    const s = v === null || v === undefined ? '' : String(v);
+    return /["\n\r]/.test(s) || s.indexOf(sep) !== -1 ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const dt = s => validDate(s) ? String(s).replace('T', ' ').slice(0, 16) : '';
+  const endOf = r => r.estado === 'completato' ? dt(r.fin || r.last_update) : r.estado === 'incompleto' ? dt(r.last_update) : '';
+  const splitName = r => {
+    if (r.nome || r.cognome) return [r.nome || '', r.cognome || ''];
+    return [r.nombre || '', ''];
+  };
+  const lines = [t('csv.cols').map(cell).join(sep)].concat(rows.map(r => {
+    const [nome, cognome] = splitName(r);
+    return [
+      r.fid || '', r.site, nome, cognome, r.lob, r.client, r.actividad, r.campaign,
+      r.corso, statusLabel(r.estado), num((r.progreso || 0) * 100), r.inizio || '', endOf(r),
+      num((r.teorico_min || 0) / 60), num((r.real_min || 0) / 60)
+    ].map(cell).join(sep);
+  }));
+  const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = t('csv.file') + '_' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  track('download_csv', { rows: rows.length });
+}
+/* ---------------- Descarga PDF (la vista actual con los filtros activos) ----------------
+ * Se genera en el navegador: html2canvas convierte cada bloque de la vista en imagen y jsPDF
+ * los coloca en páginas A4 apaisadas sin partirlos (solo se parten los que no caben en una página).
+ * Siempre en tema claro, con el Gantt completo y una cabecera con los filtros. Las librerías
+ * se cargan al pulsar el botón, para no hacer más lenta la apertura del dashboard. */
+const PDF_LIBS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+];
+const scriptsLoading = {};
+function loadScript(src) {
+  if (!scriptsLoading[src]) {
+    scriptsLoading[src] = new Promise((ok, ko) => {
+      const el = document.createElement('script');
+      el.src = src; el.onload = ok;
+      el.onerror = () => { delete scriptsLoading[src]; el.remove(); ko(new Error('No se pudo cargar ' + src)); };
+      document.head.appendChild(el);
+    });
+  }
+  return scriptsLoading[src];
+}
+const nextFrame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(r, 150))));
+/** Fila donde cortar un bloque alto sin partir texto: busca, hacia arriba desde "to", 4 filas de píxeles idénticas (espacio entre líneas). */
+function safeCut(ctx, width, from, to) {
+  const data = ctx.getImageData(0, from, width, to - from + 1).data, row = width * 4;
+  const same = (a, b) => { for (let i = 0; i < row; i++) if (data[a * row + i] !== data[b * row + i]) return false; return true; };
+  for (let y = to - from; y >= 3; y--) if (same(y, y - 1) && same(y - 1, y - 2) && same(y - 2, y - 3)) return from + y - 1;
+  return to;
+}
+function resetCharts() { Object.keys(S.charts).forEach(k => { S.charts[k].destroy(); delete S.charts[k]; }); }
+
+/** Cabecera del PDF: título, vista, fecha de los datos y filtros activos (sin botones). */
+function pdfHeader() {
+  const labels = { site: 'f.site', lob: 'f.lob', client: 'f.client', campaign: 'f.campaign', rol: 'f.role', estado: 'f.status', corso: 'f.course', persona: 'f.agent' };
+  const items = [];
+  if (S.f.from || S.f.to) items.push([t('pdf.months'), (S.f.from ? monthLabel(S.f.from) : '…') + ' – ' + (S.f.to ? monthLabel(S.f.to) : '…')]);
+  FILTER_KEYS.forEach(k => {
+    if (!S.f[k].length || (k === 'persona' && S.view !== 'agentes')) return;
+    items.push([t(labels[k]), S.f[k].map(v => optionLabel(k, v)).join(', ')]);
+  });
+  if (S.view === 'cursos' && S.courseSearch) items.push([t('pdf.tableSearch'), S.courseSearch]);
+  if (S.view === 'agentes' && S.agentSearch) items.push([t('pdf.tableSearch'), S.agentSearch]);
+  if (S.view === 'agentes' && S.agentOnly) items.push([t('pdf.tableShow'), t('o.' + S.agentOnly)]);
+  const sub = [t(S.view === 'cursos' ? 'tab.courses' : 'tab.agents'), validDate(S.version) ? t('updated', { d: dateLabel(S.version) }) : '',
+    t('pdf.generated', { d: dateLabel(new Date().toISOString()) })].filter(Boolean).join(' · ');
+  const el = document.createElement('div');
+  el.className = 'pdf-head';
+  el.innerHTML = '<div class="brand">' + esc(APP_TITLE) + '</div><div class="hint">' + esc(sub) + '</div><div class="pdf-filters">' +
+    (items.length ? items.map(([k, v]) => '<span><b>' + esc(k) + ':</b> ' + esc(v) + '</span>').join('') : '<span>' + esc(t('pdf.noFilters')) + '</span>') + '</div>';
+  return el;
+}
+
+async function downloadPdf() {
+  if (S.view === 'admin' || S.pdfBusy) return;
+  S.pdfBusy = true;
+  closeMulti();
+  const theme = document.documentElement.getAttribute('data-bs-theme');
+  const scrollY = window.scrollY;
+  const section = $('view-' + S.view);
+  const head = pdfHeader();
+  $('pdfCover').classList.remove('d-none');
+  try {
+    await Promise.all(PDF_LIBS.map(loadScript));
+    // Tema claro, sin animaciones y con el Gantt completo
+    document.body.classList.add('pdf-mode');
+    applyTheme('light'); chartDefaults(); Chart.defaults.animation.duration = 0; resetCharts();
+    section.prepend(head);
+    window.scrollTo(0, 0);
+    renderAll();
+    await nextFrame();
+
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const W = 297, H = 210, M = 10, CW = W - 2 * M, GAP = 4, PAGE_H = H - 2 * M;
+    const bg = css('--paper');
+    const rgb = (bg.match(/[0-9a-f]{2}/gi) || ['ff', 'ff', 'ff']).map(h => parseInt(h, 16));
+    const paintPage = () => { doc.setFillColor(rgb[0], rgb[1], rgb[2]); doc.rect(0, 0, W, H, 'F'); };
+    const newPage = () => { doc.addPage(); paintPage(); y = M; };
+    let y = M;
+    paintPage();
+    const blocks = [...section.children].filter(el => el.offsetHeight > 0);
+    for (const el of blocks) {
+      const scale = Math.min(2, 30000 / Math.max(el.offsetHeight, 1)); // límite de tamaño de canvas del navegador
+      // En las tablas se corta entre filas: borde inferior de cada fila, en píxeles de la imagen
+      const top = el.getBoundingClientRect().top;
+      const rowEnds = [...el.querySelectorAll('tr')].map(tr => Math.round((tr.getBoundingClientRect().bottom - top) * scale));
+      const cv = await html2canvas(el, { scale: scale, backgroundColor: bg, logging: false, useCORS: true });
+      const mmPerPx = CW / cv.width;
+      const hmm = cv.height * mmPerPx;
+      if (hmm <= PAGE_H) {
+        if (y + hmm > H - M) newPage();
+        doc.addImage(cv.toDataURL('image/jpeg', 0.92), 'JPEG', M, y, CW, hmm);
+        y += hmm + GAP;
+        continue;
+      }
+      // Bloque más alto que una página (Gantt o tablas largas): se reparte en varias
+      if (y > M) newPage();
+      const pagePx = Math.floor(PAGE_H / mmPerPx);
+      const full = cv.getContext('2d');
+      for (let sy = 0, h; sy < cv.height; sy += h) {
+        h = Math.min(pagePx, cv.height - sy);
+        if (sy + h < cv.height) {
+          const rowEnd = rowEnds.filter(v => v > sy + h * 0.5 && v <= sy + h).pop();
+          h = (rowEnd || safeCut(full, cv.width, sy + Math.floor(h * 0.8), sy + h - 1)) - sy;
+        }
+        const part = document.createElement('canvas');
+        part.width = cv.width; part.height = h;
+        const ctx = part.getContext('2d');
+        ctx.fillStyle = bg; ctx.fillRect(0, 0, part.width, h);
+        ctx.drawImage(cv, 0, sy, cv.width, h, 0, 0, cv.width, h);
+        if (sy > 0) newPage();
+        doc.addImage(part.toDataURL('image/jpeg', 0.92), 'JPEG', M, y, CW, h * mmPerPx);
+        y += h * mmPerPx + GAP;
+      }
+    }
+    const pages = doc.getNumberOfPages();
+    doc.setFontSize(8); doc.setTextColor(120);
+    for (let i = 1; i <= pages; i++) { doc.setPage(i); doc.text(t('pdf.page', { a: i, b: pages }), W - M, H - 4, { align: 'right' }); }
+    doc.save(t('pdf.file') + '_' + new Date().toISOString().slice(0, 10) + '.pdf');
+    track('download_pdf', { view: S.view, pages: pages });
+  } catch (e) {
+    alert(t('pdf.error', { e: errText(e) }));
+  } finally {
+    head.remove();
+    document.body.classList.remove('pdf-mode');
+    applyTheme(theme); chartDefaults(); resetCharts();
+    renderAll();
+    window.scrollTo(0, scrollY);
+    $('pdfCover').classList.add('d-none');
+    S.pdfBusy = false;
+  }
+}
+
+function updateCsvButton() {
+  const b = $('btnCsv'); if (!b) return;
+  const n = filteredEnroll().length;
+  b.disabled = !n;
+  b.title = t('csv.title', { n: fmtN(n) });
+}
+
+/** Clic en un gráfico: filtra solo por ese valor (otro clic sobre el mismo lo quita). */
+function setFilter(key, value, toggle) {
+  const v = value || '';
+  S.f[key] = toggle && S.f[key].length === 1 && S.f[key][0] === v ? [] : [v];
+  trackFilter(key);
+  renderAll();
+}
+/** Analítica: del filtro de agente solo se envía cuántos hay marcados, nunca quiénes. */
+function trackFilter(key) {
+  const sel = S.f[key];
+  if (!sel.length) return;
+  const p = { filter_name: key, filter_count: sel.length };
+  if (key !== 'persona') p.filter_value = sel.join(' | ').slice(0, 100);
+  track('apply_filter', p);
+}
+const defaultRole = () => S.enroll.some(r => r.rol === 'Studente') ? 'Studente' : '';
+const defaultFrom = () => DEFAULT_FROM && S.enroll.some(r => r.mes && r.mes >= DEFAULT_FROM) ? DEFAULT_FROM : '';
+function applyDefaultFilters() {
+  FILTER_KEYS.forEach(k => S.f[k] = []);
+  const rol = defaultRole();
+  if (rol) S.f.rol = [rol];
+  S.f.from = defaultFrom(); S.f.to = '';
+}
+function bindFilters() {
+  $('fFrom').addEventListener('change', e => { S.f.from = e.target.value; if (S.f.to && S.f.from > S.f.to) S.f.to = S.f.from; if (S.f.from) track('apply_filter', { filter_name: 'from', filter_value: S.f.from }); renderAll(); });
+  $('fTo').addEventListener('change', e => { S.f.to = e.target.value; if (S.f.from && S.f.to && S.f.to < S.f.from) S.f.from = S.f.to; if (S.f.to) track('apply_filter', { filter_name: 'to', filter_value: S.f.to }); renderAll(); });
+  bindMulti();
+  $('btnClear').addEventListener('click', () => { applyDefaultFilters(); renderAll(); });
+  $('btnCsv').addEventListener('click', downloadCsv);
+  $('btnPdf').addEventListener('click', downloadPdf);
+}
+
+/* =================================================================== */
+/* Gráficos                                                            */
+/* =================================================================== */
+function chartDefaults() {
+  Chart.defaults.font.family = "'IBM Plex Sans', 'Segoe UI', Arial, sans-serif";
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = css('--muted');
+  Chart.defaults.borderColor = css('--line');
+  Chart.defaults.plugins.legend.labels.usePointStyle = true;
+  Chart.defaults.plugins.legend.labels.boxWidth = 8;
+  Chart.defaults.maintainAspectRatio = false;
+  Chart.defaults.animation.duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 350;
+}
+function upsertChart(id, config) {
+  const old = S.charts[id];
+  if (old && old.config.type === config.type) { old.data = config.data; old.options = config.options; old.update(); return old; }
+  if (old) old.destroy();
+  S.charts[id] = new Chart($(id), config);
+  return S.charts[id];
+}
+const hoursTooltip = { callbacks: { label: c => ' ' + c.dataset.label + ': ' + nf1.format(c.chart.options.indexAxis === 'y' ? c.parsed.x : c.parsed.y) + ' h' } };
+const pointer = (e, els) => { e.native.target.style.cursor = els.length ? 'pointer' : 'default'; };
+const shortTick = max => function (v) { const l = this.getLabelForValue(v); return l.length > max ? l.slice(0, max - 1) + '…' : l; };
+
+function barByKey(id, rows, key, onPick, selected) {
+  const agg = {};
+  rows.forEach(r => { const k = r[key] || t('f.empty'); agg[k] = agg[k] || { real: 0, teor: 0 }; agg[k].real += r.real_min || 0; agg[k].teor += r.teorico_min || 0; });
+  let entries = Object.entries(agg).sort((a, b) => b[1].real - a[1].real);
+  const top = 15;
+  let othersLabel = null;
+  if (entries.length > top) {
+    const rest = entries.slice(top).reduce((a, [, v]) => ({ real: a.real + v.real, teor: a.teor + v.teor }), { real: 0, teor: 0 });
+    othersLabel = t('others', { n: entries.length - top });
+    entries = entries.slice(0, top).concat([[othersLabel, rest]]);
+  }
+  const labels = entries.map(e => e[0]);
+  const real = css('--real'), theory = css('--theory'), edge = css('--theory-edge');
+  const dim = (c, l) => selected.length && !selected.includes(l === t('f.empty') ? '' : l) ? c + '40' : c;
+  upsertChart(id, {
+    type: 'bar',
+    data: { labels: labels, datasets: [
+      { label: t('l.theory'), data: entries.map(e => hours(e[1].teor)), backgroundColor: labels.map(l => dim(theory, l)), borderColor: labels.map(l => dim(edge, l)), borderWidth: 1, borderRadius: 3, barPercentage: .9, categoryPercentage: .8 },
+      { label: t('l.real'), data: entries.map(e => hours(e[1].real)), backgroundColor: labels.map(l => dim(real, l)), borderRadius: 3, barPercentage: .9, categoryPercentage: .8 }
+    ] },
+    options: {
+      indexAxis: 'y', plugins: { tooltip: hoursTooltip, legend: { position: 'bottom' } },
+      scales: { x: { beginAtZero: true, ticks: { callback: v => nf0.format(v) + ' h' } }, y: { grid: { display: false }, ticks: { autoSkip: false, callback: shortTick(28) } } },
+      onClick: (e, els) => { if (!els.length) return; const l = labels[els[0].index]; if (l !== othersLabel) onPick(l === t('f.empty') ? '' : l); },
+      onHover: pointer
+    }
+  });
+}
+
+/* =================================================================== */
+/* Vista CURSOS                                                        */
+/* =================================================================== */
+function renderCursos(rows) {
+  const cursos = new Set(rows.map(r => r.corso));
+  const activos = new Set(rows.filter(r => (r.last_update || '').slice(0, 7) === CURRENT_MONTH).map(r => r.corso));
+  const personas = new Set(rows.map(r => r.persona));
+  const ok = rows.filter(r => r.estado === 'completato').length;
+  const real = rows.reduce((a, r) => a + (r.real_min || 0), 0);
+  const teor = rows.reduce((a, r) => a + (r.teorico_min || 0), 0);
+
+  $('kpiCursos').innerHTML =
+    kpi(fmtN(cursos.size), t('k.courses'), '', true) +
+    kpi(fmtN(activos.size), t('k.active'), t('k.activeHelp', { m: monthLabel(CURRENT_MONTH).toLowerCase() })) +
+    kpi(fmtN(rows.length), t('k.enrolls'), t('k.people', { n: fmtN(personas.size) })) +
+    kpi(fmtPct(ok, rows.length), t('k.completed'), t('k.ofTotal', { a: fmtN(ok), b: fmtN(rows.length) })) +
+    kpi(fmtH(real), t('k.realHours'), t('k.theoryHours', { h: fmtH(teor) })) +
+    kpi(teor ? devHtml(real, teor) : '–', t('k.dev'), t('k.devHelp'));
+
+  // Estados
+  const counts = STATUS_KEYS.map(k => rows.filter(r => r.estado === k).length);
+  const other = rows.length - counts.reduce((a, b) => a + b, 0);
+  const labels = STATUS_KEYS.map(statusLabel).concat(other ? [t('st.other')] : []);
+  const values = counts.concat(other ? [other] : []);
+  const colors = STATUS_KEYS.map(k => css(STATUS_STYLE[k][2])).concat(other ? [css('--line')] : []);
+  upsertChart('chStatus', {
+    type: 'doughnut',
+    data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderColor: css('--card'), borderWidth: 2 }] },
+    options: {
+      cutout: '64%',
+      plugins: {
+        legend: { position: 'bottom', labels: { generateLabels: ch => ch.data.labels.map((l, i) => ({ text: l + '  ' + fmtN(values[i]) + ' (' + fmtPct(values[i], rows.length) + ')', fillStyle: colors[i], strokeStyle: 'transparent', pointStyle: 'circle', index: i, hidden: false, fontColor: css('--ink') })) } },
+        tooltip: { callbacks: { label: c => ' ' + c.label + ': ' + fmtN(c.parsed) + ' (' + fmtPct(c.parsed, rows.length) + ')' } }
+      },
+      onClick: (e, els) => { if (els.length && STATUS_KEYS[els[0].index]) setFilter('estado', STATUS_KEYS[els[0].index], true); },
+      onHover: pointer
+    }
+  });
+
+  // Meses
+  const months = {};
+  rows.forEach(r => { const m = r.mes || ''; months[m] = months[m] || { real: 0, teor: 0 }; months[m].real += r.real_min || 0; months[m].teor += r.teorico_min || 0; });
+  const mKeys = Object.keys(months).filter(Boolean).sort();
+  upsertChart('chMonth', {
+    type: 'bar',
+    data: { labels: mKeys.map(monthLabel), datasets: [
+      { label: t('l.theory'), data: mKeys.map(m => hours(months[m].teor)), backgroundColor: css('--theory'), borderColor: css('--theory-edge'), borderWidth: 1, borderRadius: 3 },
+      { label: t('l.real'), data: mKeys.map(m => hours(months[m].real)), backgroundColor: css('--real'), borderRadius: 3 }
+    ] },
+    options: {
+      plugins: { tooltip: hoursTooltip, legend: { position: 'bottom' } },
+      scales: { y: { beginAtZero: true, ticks: { callback: v => nf0.format(v) + ' h' } }, x: { grid: { display: false } } },
+      onClick: (e, els) => {
+        if (!els.length) return; const m = mKeys[els[0].index];
+        if (S.f.from === m && S.f.to === m) { S.f.from = ''; S.f.to = ''; } else { S.f.from = m; S.f.to = m; }
+        renderAll();
+      },
+      onHover: pointer
+    }
+  });
+
+  barByKey('chSite', rows, 'site', v => setFilter('site', v, true), S.f.site);
+  barByKey('chGroup', rows, S.group, v => setFilter(S.group, v, true), S.f[S.group]);
+  renderCourseGantt();
+  renderCourseTable(rows);
+}
+
+/* Gantt de cursos: usa todos los filtros menos el de curso, para poder cambiar de curso desde aquí */
+function renderCourseGantt() {
+  const DAY = 864e5, now = Date.now();
+  const ms = s => validDate(s) ? new Date(s).getTime() : null;
+  const agg = {};
+  S.enroll.filter(r => passes(r, 'corso')).forEach(r => {
+    const a = agg[r.corso] = agg[r.corso] || { corso: r.corso, start: null, end: null, n: 0, ok: 0, active: 0 };
+    a.n++;
+    const st = ms(r.inizio);
+    if (st !== null && (a.start === null || st < a.start)) a.start = st;
+    if (r.estado === 'completato') a.ok++;
+    if (r.estado === 'completato' || r.estado === 'incompleto') {
+      a.active++;
+      const e = r.estado === 'completato' ? (ms(r.fin) || ms(r.last_update)) : ms(r.last_update);
+      if (e !== null && (a.end === null || e > a.end)) a.end = e;
+    }
+  });
+  const items = Object.values(agg).filter(a => a.start !== null).map(a => Object.assign(a, {
+    shown: Math.max(a.end && a.end > a.start ? a.end : a.start, a.start + DAY),
+    kind: a.n && a.ok === a.n ? 'done' : a.active ? 'progress' : 'none'
+  })).sort((a, b) => b.start - a.start || natural(a.corso, b.corso));
+
+  $('cgCard').classList.toggle('d-none', !items.length);
+  if (!items.length) return;
+
+  const colors = { done: css('--ok'), progress: css('--inc'), none: css('--nt') };
+  const sel = S.f.corso;
+  const colorOf = i => sel.length && !sel.includes(i.corso) ? colors[i.kind] + '40' : colors[i.kind];
+  const minX = Math.min(...items.map(i => i.start)) - 3 * DAY;
+  const maxX = Math.max(now, ...items.map(i => i.shown)) + 3 * DAY;
+  const yWidth = Math.min(240, Math.round($('cgScroll').clientWidth * 0.36));
+  $('cgBox').style.height = (items.length * 28 + 12) + 'px';
+
+  const fmtTick = v => new Date(v).toLocaleDateString(t('locale'), { day: 'numeric', month: 'short' });
+  const htmlAxis = {
+    id: 'htmlAxis',
+    afterDraw(chart) {
+      const x = chart.scales.x;
+      let html = x.ticks.map(tk => '<span style="left:' + x.getPixelForValue(tk.value) + 'px">' + esc(fmtTick(tk.value)) + '</span>').join('');
+      const tx = x.getPixelForValue(now);
+      if (tx >= chart.chartArea.left && tx <= chart.chartArea.right) html += '<span class="today" style="left:' + tx + 'px">' + esc(t('g.today')) + '</span>';
+      if ($('cgAxis').innerHTML !== html) $('cgAxis').innerHTML = html;
+    }
+  };
+  const todayLine = {
+    id: 'todayLineCourses',
+    afterDatasetsDraw(chart) {
+      const x = chart.scales.x.getPixelForValue(now), a = chart.chartArea;
+      if (x < a.left || x > a.right) return;
+      const c = chart.ctx; c.save(); c.strokeStyle = css('--orange'); c.setLineDash([4, 4]); c.lineWidth = 1;
+      c.beginPath(); c.moveTo(x, a.top); c.lineTo(x, a.bottom); c.stroke(); c.restore();
+    }
+  };
+
+  upsertChart('chCourseGantt', {
+    type: 'bar',
+    data: { labels: items.map(i => i.corso), datasets: [{
+      data: items.map(i => [i.start, i.shown]),
+      backgroundColor: items.map(colorOf), borderColor: items.map(colorOf), borderWidth: 1,
+      borderRadius: 4, borderSkipped: false, barPercentage: .7, categoryPercentage: .9
+    }] },
+    plugins: [htmlAxis, todayLine],
+    options: {
+      indexAxis: 'y', animation: false,
+      layout: { padding: { top: 6, bottom: 6, right: 12 } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        title: c => items[c[0].dataIndex].corso,
+        label: c => {
+          const i = items[c.dataIndex];
+          const lines = [' ' + t('cg.enrolled', { n: fmtN(i.n), p: fmtPct(i.ok, i.n) }), ' ' + t('g.start', { d: dayLabel(new Date(i.start).toISOString()) })];
+          lines.push(' ' + (i.end ? t('g.last', { d: dayLabel(new Date(i.end).toISOString()) }) : t('g.none')));
+          return lines;
+        }
+      } } },
+      scales: {
+        x: { type: 'linear', min: minX, max: maxX, ticks: { display: false, maxTicksLimit: 8 }, border: { display: false } },
+        y: { grid: { display: false }, afterFit: sc => { sc.width = yWidth; },
+          ticks: { autoSkip: false, font: { size: 11.5 }, color: ctx => sel.length && items[ctx.index] && sel.includes(items[ctx.index].corso) ? css('--ink') : css('--muted'), callback: shortTick(30) } }
+      },
+      onClick: (e, els) => { if (els.length) setFilter('corso', items[els[0].index].corso, true); },
+      onHover: pointer
+    }
+  });
+
+  $('cgLegend').innerHTML = [['done', 'cg.done'], ['progress', 'cg.progress'], ['none', 'cg.none']].map(([k, l]) =>
+    '<span><i style="background:' + colors[k] + '"></i>' + esc(t(l)) + '</span>').join('') +
+    '<span><i style="background:transparent;border-left:2px dashed ' + css('--orange') + ';border-radius:0;width:2px"></i>' + esc(t('g.today')) + '</span>';
+
+  if (sel) {
+    const idx = items.findIndex(i => i.corso === sel);
+    if (idx >= 0) {
+      const y = S.charts.chCourseGantt.scales.y.getPixelForValue(idx);
+      const box = $('cgScroll');
+      if (y < box.scrollTop + 20 || y > box.scrollTop + box.clientHeight - 20) box.scrollTop = Math.max(0, y - box.clientHeight / 2);
+    }
+  }
+}
+
+function courseAggregates(rows) {
+  const agg = {};
+  rows.forEach(r => {
+    const a = agg[r.corso] = agg[r.corso] || { corso: r.corso, breve: r.corso_breve, inizio: r.inizio, n: 0, ok: 0, inc: 0, nt: 0, teor: 0, real: 0, last: '', prog: 0 };
+    a.n++; a.teor += r.teorico_min || 0; a.real += r.real_min || 0; a.prog += r.progreso || 0;
+    if (r.estado === 'completato') a.ok++; else if (r.estado === 'incompleto') a.inc++; else if (r.estado === 'non tentato') a.nt++;
+    if ((r.last_update || '') > a.last) a.last = r.last_update;
+    if (r.inizio && (!a.inizio || r.inizio < a.inizio)) a.inizio = r.inizio;
+  });
+  return Object.values(agg).map(a => Object.assign(a, { pctOk: a.n ? a.ok / a.n : 0, dev: a.teor ? a.real / a.teor - 1 : null, progMed: a.n ? a.prog / a.n : 0 }));
+}
+function sortRows(list, sort) {
+  const k = sort.key, d = sort.dir;
+  return list.sort((a, b) => {
+    const x = a[k], y = b[k];
+    if (x == null && y == null) return 0; if (x == null) return 1; if (y == null) return -1;
+    return (typeof x === 'string' ? natural(x, y) : x - y) * d;
+  });
+}
+function headerHtml(cols, sort, tableId) {
+  return '<thead><tr>' + cols.map(c => '<th class="' + (c.num ? 'num ' : '') + (c.key ? 'sortable' : '') + (c.key && c.key === sort.key ? ' sorted' + (sort.dir > 0 ? ' asc' : '') : '') +
+    '"' + (c.key ? ' data-sort="' + c.key + '" data-table="' + tableId + '"' : '') + '>' + c.label + '</th>').join('') + '</tr></thead>';
+}
+
+function renderCourseTable(rows) {
+  let list = courseAggregates(rows);
+  const q = S.courseSearch.toLowerCase();
+  if (q) list = list.filter(a => (a.corso + ' ' + (a.breve || '')).toLowerCase().includes(q));
+  sortRows(list, S.courseSort);
+  const cols = [
+    { key: 'corso', label: t('col.course') }, { key: 'inizio', label: t('col.start') }, { key: 'n', label: t('col.enrolled'), num: true },
+    { key: 'pctOk', label: t('col.status') }, { key: 'progMed', label: t('col.progress'), num: true },
+    { key: 'teor', label: t('col.theory'), num: true }, { key: 'real', label: t('col.real'), num: true },
+    { key: 'dev', label: t('col.dev'), num: true }, { key: 'last', label: t('col.last') }
+  ];
+  const body = list.length ? list.map(a =>
+    '<tr class="clickable" data-course="' + esc(a.corso) + '">' +
+    '<td class="name-cell"><div class="fw-medium">' + esc(a.corso) + '</div>' + (a.breve && a.breve !== a.corso ? '<div class="sub">' + esc(a.breve) + '</div>' : '') + '</td>' +
+    '<td class="text-nowrap">' + dayLabel(a.inizio) + '</td><td class="num">' + fmtN(a.n) + '</td>' +
+    '<td style="min-width:150px">' + stackHtml(a.ok, a.inc, a.nt) + '<div class="hint mt-1">' + t('pctCompleted', { p: fmtPct(a.ok, a.n) }) + '</div></td>' +
+    '<td class="num">' + Math.round(a.progMed * 100) + '%</td><td class="num">' + fmtH(a.teor) + '</td><td class="num">' + fmtH(a.real) + '</td>' +
+    '<td class="num">' + devHtml(a.real, a.teor) + '</td><td class="text-nowrap">' + dayLabel(a.last) + '</td></tr>').join('')
+    : '<tr><td colspan="9" class="empty">' + t('noCourses') + '</td></tr>';
+  $('tblCourses').innerHTML = headerHtml(cols, S.courseSort, 'courses') + '<tbody>' + body + '</tbody>';
+}
+
+/* Detalle de un curso: módulos y agentes */
+function openCourse(corso, keepState) {
+  S.openCourse = corso;
+  if (!keepState) track('open_course', { course_name: String(corso).slice(0, 100) });
+  if (!keepState) {
+    S.cmStatus = ''; S.cmSearch = ''; $('cmAgentSearch').value = '';
+    bootstrap.Tab.getOrCreateInstance(document.querySelector('[data-bs-target="#cmPaneMods"]')).show();
+  }
+  const enroll = filteredEnroll().filter(r => r.corso === corso);
+  const mods = filteredMods().filter(r => r.corso === corso);
+  const agg = {};
+  mods.forEach(m => {
+    const a = agg[m.modulo] = agg[m.modulo] || { modulo: m.modulo, n: 0, ok: 0, inc: 0, nt: 0, teor: 0, real: 0 };
+    a.n += m.personas; a.ok += m.completados; a.inc += m.incompletos; a.nt += m.no_intentados; a.teor += m.teorico_min || 0; a.real += m.real_min || 0;
+  });
+  const list = Object.values(agg).sort((a, b) => natural(a.modulo, b.modulo));
+  const ca = courseAggregates(enroll)[0] || { n: 0, ok: 0, teor: 0, real: 0 };
+  const breve = enroll[0] && enroll[0].corso_breve && enroll[0].corso_breve !== corso ? enroll[0].corso_breve + '. ' : '';
+
+  $('cmTitle').textContent = corso;
+  $('cmSub').textContent = breve + t('m.start', { d: dayLabel(ca.inizio) }) + ' ' + t('m.note');
+  $('cmKpis').innerHTML =
+    kpi(fmtN(list.length), t('m.modules'), '', true) + kpi(fmtN(ca.n), t('m.enrolled'), '') +
+    kpi(fmtPct(ca.ok, ca.n), t('m.courseCompleted'), t('k.people', { n: fmtN(ca.ok) })) +
+    kpi(fmtH(ca.teor), t('l.theory'), '') + kpi(fmtH(ca.real), t('l.real'), '') +
+    kpi(ca.teor ? devHtml(ca.real, ca.teor) : '–', t('k.dev'), '');
+  $('cmTabAgents').textContent = t('m.tabAgents') + ' (' + fmtN(enroll.length) + ')';
+
+  const show = () => {
+    $('cmChartBox').style.height = Math.max(220, list.length * 26 + 70) + 'px';
+    upsertChart('chModules', {
+      type: 'bar',
+      data: { labels: list.map(a => a.modulo), datasets: [
+        { label: t('l.theory'), data: list.map(a => hours(a.teor)), backgroundColor: css('--theory'), borderColor: css('--theory-edge'), borderWidth: 1, borderRadius: 3 },
+        { label: t('l.real'), data: list.map(a => hours(a.real)), backgroundColor: css('--real'), borderRadius: 3 }
+      ] },
+      options: { indexAxis: 'y', plugins: { tooltip: hoursTooltip, legend: { position: 'bottom' } },
+        scales: { x: { beginAtZero: true, ticks: { callback: v => nf1.format(v) + ' h' } }, y: { grid: { display: false }, ticks: { autoSkip: false, callback: shortTick(40) } } } }
+    });
+  };
+
+  const cols = [t('col.module'), t('col.people'), t('col.moduleStatus'), t('col.completed'), t('col.theory'), t('col.real'), t('col.dev')];
+  $('tblModules').innerHTML = '<thead><tr>' + cols.map((c, i) => '<th class="' + (i && i !== 2 ? 'num' : '') + '">' + c + '</th>').join('') + '</tr></thead><tbody>' +
+    (list.length ? list.map(a => '<tr><td>' + esc(a.modulo) + '</td><td class="num">' + fmtN(a.n) + '</td><td style="min-width:150px">' + stackHtml(a.ok, a.inc, a.nt) +
+      '</td><td class="num">' + fmtPct(a.ok, a.n) + '</td><td class="num">' + fmtH(a.teor) + '</td><td class="num">' + fmtH(a.real) + '</td><td class="num">' + devHtml(a.real, a.teor) + '</td></tr>').join('')
+      : '<tr><td colspan="7" class="empty">' + t('m.noModules') + '</td></tr>') + '</tbody>';
+
+  renderCourseAgents();
+  const modal = $('courseModal');
+  if (modal.classList.contains('show')) show();
+  else { modal.addEventListener('shown.bs.modal', show, { once: true }); bootstrap.Modal.getOrCreateInstance(modal).show(); }
+}
+
+function renderCourseAgents() {
+  const all = filteredEnroll().filter(r => r.corso === S.openCourse);
+  const seg = [''].concat(STATUS_KEYS);
+  $('cmStatusSeg').innerHTML = seg.map(k => {
+    const n = k ? all.filter(r => r.estado === k).length : all.length;
+    const id = 'cmSt' + seg.indexOf(k);
+    return '<input type="radio" class="btn-check" name="cmSt" id="' + id + '" value="' + esc(k) + '"' + (S.cmStatus === k ? ' checked' : '') + '>' +
+      '<label class="btn btn-outline-primary" for="' + id + '">' + esc(k ? statusLabel(k) : t('f.all')) + ' (' + fmtN(n) + ')</label>';
+  }).join('');
+  let list = all.slice();
+  if (S.cmStatus) list = list.filter(r => r.estado === S.cmStatus);
+  const q = S.cmSearch.toLowerCase();
+  if (q) list = list.filter(r => [r.nombre, r.persona, r.fid].join(' ').toLowerCase().includes(q));
+  list = list.map(r => Object.assign({}, r, { nombre: r.nombre || r.persona, dev: r.teorico_min ? r.real_min / r.teorico_min - 1 : null }));
+  sortRows(list, S.cmSort);
+  const cols = [
+    { key: 'nombre', label: t('col.agent') }, { key: 'site', label: t('col.site') }, { key: 'campaign', label: t('col.campaign') },
+    { key: 'estado', label: t('col.courseStatus') }, { key: 'progreso', label: t('col.progress') }, { key: 'mod_completados', label: t('col.modules'), num: true },
+    { key: 'teorico_min', label: t('col.theory'), num: true }, { key: 'real_min', label: t('col.real'), num: true }, { key: 'dev', label: t('col.dev'), num: true }, { key: 'last_update', label: t('col.last') }
+  ];
+  $('tblCourseAgents').innerHTML = headerHtml(cols, S.cmSort, 'cmAgents') + '<tbody>' + (list.length ? list.map(r =>
+    '<tr class="clickable" data-agent="' + esc(r.persona) + '">' +
+    '<td class="name-cell"><div class="fw-medium">' + esc(r.nombre) + '</div><div class="sub">' + (r.fid ? esc(r.fid) : missingBadge()) + ' &nbsp;' + esc(r.persona) + '</div></td>' +
+    '<td>' + esc(r.site) + '</td><td>' + esc(r.campaign) + '</td><td>' + badge(r.estado) + '</td>' +
+    '<td class="text-nowrap">' + progressMini(r.progreso) + '</td><td class="num">' + r.mod_completados + '/' + r.modulos + '</td>' +
+    '<td class="num">' + fmtH(r.teorico_min) + '</td><td class="num">' + fmtH(r.real_min) + '</td><td class="num">' + devHtml(r.real_min, r.teorico_min) + '</td>' +
+    '<td class="text-nowrap">' + dayLabel(r.last_update) + '</td></tr>').join('') : '<tr><td colspan="10" class="empty">' + t('m.noAgents') + '</td></tr>') + '</tbody>';
+}
+
+/* =================================================================== */
+/* Vista AGENTES                                                       */
+/* =================================================================== */
+function agentAggregates(rows) {
+  const agg = {};
+  rows.forEach(r => {
+    const a = agg[r.persona] = agg[r.persona] || { persona: r.persona, nombre: r.nombre, cursos: 0, ok: 0, inc: 0, nt: 0, teor: 0, real: 0, prog: 0, last: '', _ref: null };
+    a.cursos++; a.teor += r.teorico_min || 0; a.real += r.real_min || 0; a.prog += r.progreso || 0;
+    if (r.estado === 'completato') a.ok++; else if (r.estado === 'incompleto') a.inc++; else if (r.estado === 'non tentato') a.nt++;
+    if ((r.last_update || '') > a.last) a.last = r.last_update;
+    if (a._ref === null || (r.inizio || '') >= a._ref) {
+      a._ref = r.inizio || '';
+      Object.assign(a, { nombre: r.nombre || a.nombre, fid: r.fid, site: r.site, lob: r.lob, client: r.client, campaign: r.campaign, actividad: r.actividad, match: r.id_match });
+    }
+  });
+  return Object.values(agg).map(a => Object.assign(a, { nombre: a.nombre || a.persona, pctOk: a.cursos ? a.ok / a.cursos : 0, progMed: a.cursos ? a.prog / a.cursos : 0, dev: a.teor ? a.real / a.teor - 1 : null, pend: a.cursos - a.ok }));
+}
+
+function renderAgentes(rows) {
+  const all = agentAggregates(rows);
+  const n = all.length;
+  const okAll = all.filter(a => a.cursos && a.ok === a.cursos).length;
+  const pending = all.filter(a => a.pend > 0).length;
+  const real = all.reduce((s, a) => s + a.real, 0), teor = all.reduce((s, a) => s + a.teor, 0);
+  const missing = all.filter(a => a.match !== 'OK').length;
+
+  $('kpiAgentes').innerHTML =
+    kpi(fmtN(n), t('k.agents'), '', true) +
+    kpi(n ? nf1.format(rows.length / n) : '–', t('k.perAgent'), t('k.perAgentHelp')) +
+    kpi(fmtPct(okAll, n), t('k.allDone'), t('k.agentsN', { n: fmtN(okAll) })) +
+    kpi(fmtN(pending), t('k.pending'), t('k.pendingHelp')) +
+    kpi(n ? fmtH(real / n) : '–', t('k.hoursPerAgent'), t('k.theoryHours', { h: n ? fmtH(teor / n) : '–' })) +
+    kpi(fmtN(missing), t('k.missing'), t('k.missingHelp'));
+
+  const bands = [['0%', a => a.pctOk === 0], ['1–49%', a => a.pctOk > 0 && a.pctOk < .5], ['50–99%', a => a.pctOk >= .5 && a.pctOk < 1], ['100%', a => a.pctOk === 1]];
+  upsertChart('chAgentBands', {
+    type: 'bar',
+    data: { labels: bands.map(b => b[0]), datasets: [{ label: t('k.agents'), data: bands.map(b => all.filter(b[1]).length), backgroundColor: [css('--nt'), css('--inc'), css('--theory'), css('--ok')], borderColor: [css('--nt'), css('--inc'), css('--theory-edge'), css('--ok')], borderWidth: 1, borderRadius: 4 }] },
+    options: { plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + t('a.agentsTip', { n: fmtN(c.parsed.y) }) } } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false }, title: { display: true, text: t('a.bandsAxis') } } } }
+  });
+
+  S.lastAgents = all;
+  renderScatter();
+  renderAgentTable(all);
+}
+
+function renderScatter() {
+  const pts = S.lastAgents.filter(a => a.teor > 0).map(a => ({ x: hours(a.teor), y: hours(a.real), a: a }));
+  const fullMax = Math.max(1, ...pts.map(p => Math.max(p.x, p.y)));
+  const maxV = Math.max(1, Math.ceil(fullMax * S.scatterZoom / 100));
+  const out = pts.filter(p => p.x > maxV || p.y > maxV).length;
+  $('scatterOut').textContent = out ? t('a.out', { n: fmtN(out) }) : '';
+  upsertChart('chAgentScatter', {
+    type: 'scatter',
+    data: { datasets: [
+      { label: t('k.agents'), data: pts, backgroundColor: pts.map(p => p.y > p.x ? css('--inc') : css('--real')), pointRadius: 4, pointHoverRadius: 6 },
+      { label: '=', type: 'line', data: [{ x: 0, y: 0 }, { x: maxV, y: maxV }], borderColor: css('--stone'), borderDash: [4, 4], borderWidth: 1, pointRadius: 0 }
+    ] },
+    options: {
+      animation: false,
+      plugins: { legend: { display: false }, tooltip: { filter: c => c.datasetIndex === 0, callbacks: { label: c => ' ' + t('a.scatterTip', { n: c.raw.a.nombre, r: nf1.format(c.raw.y), t: nf1.format(c.raw.x) }) } } },
+      scales: { x: { beginAtZero: true, max: maxV, title: { display: true, text: t('a.x') } }, y: { beginAtZero: true, max: maxV, title: { display: true, text: t('a.y') } } },
+      onClick: (e, els) => { const el = els.find(x => x.datasetIndex === 0); if (el) openAgent(pts[el.index].a.persona); },
+      onHover: (e, els) => { e.native.target.style.cursor = els.some(x => x.datasetIndex === 0) ? 'pointer' : 'default'; }
+    }
+  });
+}
+
+function renderAgentTable(all) {
+  let list = all.slice();
+  const q = S.agentSearch.toLowerCase();
+  if (q) list = list.filter(a => [a.nombre, a.persona, a.fid].join(' ').toLowerCase().includes(q));
+  if (S.agentOnly === 'pending') list = list.filter(a => a.pend > 0);
+  if (S.agentOnly === 'missing') list = list.filter(a => a.match !== 'OK');
+  sortRows(list, S.agentSort);
+  const shown = list.slice(0, S.agentLimit);
+  const cols = [
+    { key: 'nombre', label: t('col.agent') }, { key: 'site', label: t('col.site') }, { key: 'campaign', label: t('col.campaign') },
+    { key: 'cursos', label: t('col.courses'), num: true }, { key: 'pctOk', label: t('col.coursesStatus') },
+    { key: 'progMed', label: t('col.progress'), num: true }, { key: 'teor', label: t('col.theory'), num: true },
+    { key: 'real', label: t('col.real'), num: true }, { key: 'dev', label: t('col.dev'), num: true }, { key: 'last', label: t('col.last') }
+  ];
+  const body = shown.length ? shown.map(a =>
+    '<tr class="clickable" data-agent="' + esc(a.persona) + '">' +
+    '<td class="name-cell"><div class="fw-medium">' + esc(a.nombre) + '</div><div class="sub">' + (a.fid ? esc(a.fid) : missingBadge()) + ' &nbsp;' + esc(a.persona) + '</div></td>' +
+    '<td>' + esc(a.site) + '</td><td>' + esc(a.campaign) + '</td><td class="num">' + fmtN(a.cursos) + '</td>' +
+    '<td style="min-width:150px">' + stackHtml(a.ok, a.inc, a.nt) + '<div class="hint mt-1">' + t('coursesDone', { a: a.ok, b: a.cursos }) + '</div></td>' +
+    '<td class="num">' + Math.round(a.progMed * 100) + '%</td><td class="num">' + fmtH(a.teor) + '</td><td class="num">' + fmtH(a.real) + '</td><td class="num">' + devHtml(a.real, a.teor) + '</td>' +
+    '<td class="text-nowrap">' + dayLabel(a.last) + '</td></tr>').join('')
+    : '<tr><td colspan="10" class="empty">' + t('noAgents') + '</td></tr>';
+  $('tblAgents').innerHTML = headerHtml(cols, S.agentSort, 'agents') + '<tbody>' + body + '</tbody>';
+  const more = $('btnMoreAgents');
+  more.classList.toggle('d-none', list.length <= S.agentLimit);
+  more.textContent = t('more', { n: fmtN(list.length - shown.length) });
+}
+
+function openAgent(persona, keepOpen) {
+  S.openAgent = persona;
+  if (!keepOpen) track('open_agent');
+  const rows = filteredEnroll().filter(r => r.persona === persona).sort((a, b) => natural(b.inizio, a.inizio));
+  const a = agentAggregates(rows)[0];
+  if (!a) return;
+  $('apName').textContent = a.nombre;
+  $('apSub').innerHTML = esc(a.persona) + ' &nbsp;' + (a.fid ? esc(a.fid) : missingBadge());
+  const meta = [['meta.site', a.site], ['meta.lob', a.lob], ['meta.client', a.client], ['meta.campaign', a.campaign], ['meta.activity', a.actividad]];
+  $('apMeta').innerHTML = meta.map(m => '<div><div class="k">' + t(m[0]) + '</div><div>' + esc(m[1] || '–') + '</div></div>').join('');
+  const mini = (v, l, h) => '<div class="col-6 col-md-3"><div class="card kpi"><div class="v" style="font-size:21px">' + v + '</div><div class="l">' + l + '</div>' + (h ? '<div class="h">' + h + '</div>' : '') + '</div></div>';
+  $('apKpis').innerHTML =
+    mini(fmtN(a.cursos), t('p.assigned')) +
+    mini(a.ok + ' / ' + a.cursos, t('p.completed')) +
+    mini(fmtH(a.teor), t('a.x')) +
+    mini(fmtH(a.real), t('a.y'), a.teor ? t('k.dev') + ': ' + devHtml(a.real, a.teor) : '');
+  $('apCourses').innerHTML = rows.map((r, i) => {
+    const p = Math.round((r.progreso || 0) * 100);
+    return '<div class="course-item"><div class="top" data-toggle-mods="' + i + '" role="button" tabindex="0" aria-expanded="false">' +
+      '<div class="d-flex flex-wrap align-items-center gap-2 mb-2"><div class="fw-medium me-auto">' + esc(r.corso) + '</div>' + badge(r.estado) + '</div>' +
+      '<div class="progress mb-2" role="progressbar" aria-valuenow="' + p + '" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:' + p + '%"></div></div>' +
+      '<div class="d-flex flex-wrap gap-3 hint"><span>' + t('p.progress', { p: p + '%' }) + '</span><span>' + t('p.start', { d: dayLabel(r.inizio) }) + '</span><span>' + t('p.theory', { h: fmtH(r.teorico_min) }) +
+      '</span><span>' + t('p.real', { h: fmtH(r.real_min) }) + ' ' + devHtml(r.real_min, r.teorico_min) + '</span><span>' + t('p.mods', { a: r.mod_completados, b: r.modulos }) + '</span><span>' + t('p.role', { r: esc(roleLabel(r.rol)) }) + '</span></div>' +
+      '</div><div class="mods d-none" id="mods-' + i + '" data-course="' + esc(r.corso) + '"></div></div>';
+  }).join('') || '<div class="empty">' + t('p.noCourses') + '</div>';
+  $('apCourses').dataset.persona = persona;
+
+  const drawGantt = () => renderGantt(rows);
+  const modal = bootstrap.Modal.getInstance($('courseModal'));
+  const showPanel = () => { $('agentPanel').addEventListener('shown.bs.offcanvas', drawGantt, { once: true }); bootstrap.Offcanvas.getOrCreateInstance($('agentPanel')).show(); };
+  if (keepOpen || $('agentPanel').classList.contains('show')) { drawGantt(); return; }
+  if (modal && $('courseModal').classList.contains('show')) { $('courseModal').addEventListener('hidden.bs.modal', showPanel, { once: true }); modal.hide(); }
+  else showPanel();
+}
+
+function renderGantt(rows) {
+  const DAY = 864e5, now = Date.now();
+  const ms = s => validDate(s) ? new Date(s).getTime() : null;
+  const items = rows.map(r => {
+    const start = ms(r.inizio);
+    if (start === null) return null;
+    let end = null, kind;
+    if (r.estado === 'completato') { end = ms(r.fin) || ms(r.last_update); kind = 'end'; }
+    else if (r.estado === 'incompleto') { end = ms(r.last_update); kind = 'last'; }
+    else { kind = 'none'; }
+    const shown = Math.max(end && end > start ? end : start, start + DAY);
+    return { r: r, start: start, end: end, shown: shown, kind: kind };
+  }).filter(Boolean).sort((a, b) => a.start - b.start);
+
+  const card = $('apGanttCard');
+  card.classList.toggle('d-none', !items.length);
+  if (!items.length) return;
+
+  const minX = Math.min(...items.map(i => i.start)) - 3 * DAY;
+  const maxX = Math.max(now, ...items.map(i => i.shown)) + 3 * DAY;
+  const colorOf = r => css((STATUS_STYLE[r.estado] || STATUS_STYLE['non tentato'])[2]);
+  $('apGanttBox').style.height = Math.max(150, items.length * 34 + 70) + 'px';
+
+  const todayLine = {
+    id: 'todayLine',
+    afterDatasetsDraw(chart) {
+      const x = chart.scales.x.getPixelForValue(now), a = chart.chartArea;
+      if (x < a.left || x > a.right) return;
+      const c = chart.ctx; c.save();
+      c.strokeStyle = css('--orange'); c.setLineDash([4, 4]); c.lineWidth = 1;
+      c.beginPath(); c.moveTo(x, a.top); c.lineTo(x, a.bottom); c.stroke();
+      c.setLineDash([]); c.fillStyle = css('--orange'); c.font = '11px IBM Plex Sans, Arial'; c.textAlign = 'center';
+      c.fillText(t('g.today'), x, a.top - 4); c.restore();
+    }
+  };
+  const fmtTick = v => new Date(v).toLocaleDateString(t('locale'), { day: 'numeric', month: 'short' });
+
+  upsertChart('chGantt', {
+    type: 'bar',
+    data: { labels: items.map(i => i.r.corso), datasets: [{
+      data: items.map(i => [i.start, i.shown]),
+      backgroundColor: items.map(i => colorOf(i.r)),
+      borderColor: items.map(i => colorOf(i.r)), borderWidth: 1,
+      borderRadius: 4, borderSkipped: false, barPercentage: .62, categoryPercentage: .9
+    }] },
+    plugins: [todayLine],
+    options: {
+      indexAxis: 'y',
+      layout: { padding: { top: 14 } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        title: c => items[c[0].dataIndex].r.corso,
+        label: c => {
+          const i = items[c.dataIndex];
+          const lines = [' ' + statusLabel(i.r.estado), ' ' + t('g.start', { d: dayLabel(i.r.inizio) })];
+          if (i.kind === 'end' && i.end) lines.push(' ' + t('g.end', { d: dayLabel(new Date(i.end).toISOString()) }));
+          else if (i.kind === 'last' && i.end) lines.push(' ' + t('g.last', { d: dayLabel(new Date(i.end).toISOString()) }));
+          else lines.push(' ' + t('g.none'));
+          return lines;
+        }
+      } } },
+      scales: {
+        x: { type: 'linear', min: minX, max: maxX, ticks: { maxTicksLimit: 7, callback: fmtTick } },
+        y: { grid: { display: false }, ticks: { autoSkip: false, callback: shortTick(30) } }
+      }
+    }
+  });
+  $('apGanttLegend').innerHTML = STATUS_KEYS.map(k => '<span><i style="background:' + css(STATUS_STYLE[k][2]) + '"></i>' + esc(statusLabel(k)) + '</span>').join('') +
+    '<span><i style="background:transparent;border-left:2px dashed ' + css('--orange') + ';border-radius:0;width:2px"></i>' + esc(t('g.today')) + '</span>';
+}
+
+function toggleAgentMods(i) {
+  const box = $('mods-' + i);
+  const head = document.querySelector('[data-toggle-mods="' + i + '"]');
+  const persona = $('apCourses').dataset.persona;
+  const open = box.classList.toggle('d-none') === false;
+  head.setAttribute('aria-expanded', open);
+  if (!open) return;
+  const draw = () => {
+    const list = (S.agentMods[persona] || []).filter(m => m.corso === box.dataset.course).sort((a, b) => natural(a.modulo, b.modulo));
+    box.innerHTML = list.length ? '<table class="table table-sm"><thead><tr><th>' + t('col.module') + '</th><th>' + t('col.status') + '</th><th class="num">' + t('l.theory') + '</th><th class="num">' + t('l.real') + '</th><th>' + t('col.completedAt') + '</th></tr></thead><tbody>' +
+      list.map(m => '<tr><td>' + esc(m.modulo) + '</td><td>' + badge(m.estado) + '</td><td class="num">' + fmtH(m.teorico_min) + '</td><td class="num">' + fmtH(m.real_min) + '</td><td class="text-nowrap">' + dayLabel(m.completado) + '</td></tr>').join('') + '</tbody></table>'
+      : '<div class="hint py-2">' + t('p.noMods') + '</div>';
+  };
+  if (S.agentMods[persona]) return draw();
+  box.innerHTML = '<div class="hint py-2"><span class="spinner-border spinner-border-sm me-2"></span>' + t('p.loadingMods') + '</div>';
+  google.script.run
+    .withSuccessHandler(json => { S.agentMods[persona] = toObjects(JSON.parse(json)); draw(); })
+    .withFailureHandler(err => { box.innerHTML = '<div class="small py-2" style="color:var(--orange-text)">' + esc(t('p.modsError', { e: errText(err) })) + '</div>'; })
+    .getAgentModules(persona);
+}
+
+/* =================================================================== */
+/* Vista ADMIN                                                         */
+/* =================================================================== */
+function renderAdmin(page) {
+  if (!IS_ADMIN || !page) return;
+  S.page = page;
+  const link = $('adAccessLink');
+  if (page.accessSheetUrl) { link.href = page.accessSheetUrl; link.classList.remove('d-none'); $('adAccessNote').textContent = t('ad.accessOn'); }
+  else { link.classList.add('d-none'); $('adAccessNote').textContent = t('ad.accessOff'); }
+  const run = page.lastRun;
+  const li = (arr, style) => '<ul class="mb-2"' + (style ? ' style="' + style + '"' : '') + '>' + arr.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+  let html = '';
+  if (run) {
+    html += '<div class="mb-2">' + esc(t('ad.launched', { d: dateLabel(run.finishedAt), u: run.triggeredBy })) + (run.full ? esc(t('ad.fullTag')) : '') + '</div>';
+    if (run.error) html += '<div class="mb-2" style="color:var(--orange-text)"><b>' + t('ad.error') + '</b> ' + esc(run.error) + '</div>';
+    html += run.files.length ? li(run.files.map(f => t('ad.fileRows', { f: f.name, n: fmtN(f.rows), m: f.periodo }))) : '<div class="text-secondary mb-2">' + t('ad.noNew') + '</div>';
+    if (run.skipped.length) html += '<div class="fw-semibold" style="color:var(--orange-text)">' + t('ad.notLoaded') + '</div>' + li(run.skipped, 'color:var(--orange-text)');
+    if (run.warnings.length) html += '<div class="fw-semibold">' + t('ad.warnings') + '</div>' + li(run.warnings);
+  } else html = '<div class="text-secondary">' + t('ad.never') + '</div>';
+  $('adminLog').innerHTML = html;
+  const stats = (page.lastSuccess && page.lastSuccess.stats) || [];
+  $('tblLoadStats').innerHTML = '<thead><tr><th>' + t('col.month') + '</th><th class="num">' + t('col.rows') + '</th><th class="num">' + t('col.people') + '</th><th class="num">' + t('col.missing') + '</th></tr></thead><tbody>' +
+    stats.slice().reverse().map(r => '<tr><td>' + monthLabel(r.mes) + '</td><td class="num">' + fmtN(r.filas) + '</td><td class="num">' + fmtN(r.personas) + '</td><td class="num">' + fmtN(r.sin_id) + '</td></tr>').join('') + '</tbody>';
+}
+
+function runUpdate(full) {
+  if (full && !confirm(t('ad.confirm'))) return;
+  track('run_update', { full_reload: !!full });
+  const st = $('adminStatus');
+  const btns = [$('btnUpdate'), $('btnFull')];
+  btns.forEach(b => b.disabled = true);
+  st.className = 'alert alert-secondary mt-3';
+  st.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>' + t('ad.running');
+  google.script.run
+    .withSuccessHandler(page => {
+      btns.forEach(b => b.disabled = false);
+      st.className = 'alert alert-light border mt-3'; st.textContent = t('ad.done');
+      renderAdmin(page); fetchData();
+    })
+    .withFailureHandler(err => {
+      btns.forEach(b => b.disabled = false);
+      st.className = 'alert mt-3'; st.style.background = 'var(--orange-soft)'; st.style.color = 'var(--orange-text)';
+      st.textContent = t('ad.failed', { e: errText(err) });
+      google.script.run.withSuccessHandler(renderAdmin).getPageData();
+    })
+    .runUpdate(full);
+}
+
+/* =================================================================== */
+/* Render general y arranque                                           */
+/* =================================================================== */
+function renderAll() {
+  fillMonths();
+  FILTER_KEYS.forEach(fillFilter);
+  const rows = filteredEnroll();
+  updateCsvButton();
+  if (S.view === 'cursos') renderCursos(rows);
+  if (S.view === 'agentes') renderAgentes(rows);
+}
+function setView(v) {
+  if (S.view !== v) trackPage(v);
+  S.view = v;
+  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  ['cursos', 'agentes', 'admin'].forEach(x => { const el = $('view-' + x); if (el) el.classList.toggle('d-none', x !== v); });
+  $('filterBar').classList.toggle('d-none', v === 'admin');
+  closeMulti();
+  $('wrapPersona').classList.toggle('d-none', v !== 'agentes');
+  if (v !== 'admin') renderAll();
+}
+
+function bindEvents() {
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+  document.querySelectorAll('input[name="lang"]').forEach(r => r.addEventListener('change', e => setLang(e.target.value)));
+  $('btnTheme').addEventListener('click', toggleTheme);
+  $('scatterZoom').addEventListener('input', e => { S.scatterZoom = Number(e.target.value); renderScatter(); });
+  document.querySelectorAll('input[name="grp"]').forEach(r => r.addEventListener('change', e => { S.group = e.target.value; renderAll(); }));
+  $('courseSearch').addEventListener('input', e => { S.courseSearch = e.target.value; renderCourseTable(filteredEnroll()); });
+  $('agentSearch').addEventListener('input', e => { S.agentSearch = e.target.value; S.agentLimit = 50; renderAgentTable(agentAggregates(filteredEnroll())); });
+  $('agentOnly').addEventListener('change', e => { S.agentOnly = e.target.value; S.agentLimit = 50; renderAgentTable(agentAggregates(filteredEnroll())); });
+  $('btnMoreAgents').addEventListener('click', () => { S.agentLimit += 100; renderAgentTable(agentAggregates(filteredEnroll())); });
+  $('cmAgentSearch').addEventListener('input', e => { S.cmSearch = e.target.value; renderCourseAgents(); });
+  $('cmStatusSeg').addEventListener('change', e => { if (e.target.name === 'cmSt') { S.cmStatus = e.target.value; renderCourseAgents(); } });
+
+  document.addEventListener('click', e => {
+    const th = e.target.closest('th[data-sort]');
+    if (th) {
+      const tb = th.dataset.table;
+      const sort = tb === 'courses' ? S.courseSort : tb === 'agents' ? S.agentSort : S.cmSort;
+      if (sort.key === th.dataset.sort) sort.dir *= -1;
+      else { sort.key = th.dataset.sort; sort.dir = ['corso', 'nombre', 'site', 'campaign', 'inizio', 'estado'].includes(sort.key) ? 1 : -1; }
+      if (tb === 'courses') renderCourseTable(filteredEnroll());
+      else if (tb === 'agents') renderAgentTable(agentAggregates(filteredEnroll()));
+      else renderCourseAgents();
+      return;
+    }
+    const tc = e.target.closest('tr[data-course]'); if (tc) return openCourse(tc.dataset.course);
+    const ta = e.target.closest('tr[data-agent]'); if (ta) return openAgent(ta.dataset.agent);
+    const tm = e.target.closest('[data-toggle-mods]'); if (tm) return toggleAgentMods(tm.dataset.toggleMods);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const tm = e.target.closest('[data-toggle-mods]'); if (tm) { e.preventDefault(); toggleAgentMods(tm.dataset.toggleMods); }
+  });
+  if (IS_ADMIN) { $('btnUpdate').addEventListener('click', () => runUpdate(false)); $('btnFull').addEventListener('click', () => runUpdate(true)); }
+}
+
+function useData(d) {
+  S.version = d.version; S.missing = d.missingLabel || S.missing;
+  S.enroll = toObjects(d.enroll); S.mods = toObjects(d.mods); S.agentMods = {};
+  S.names = {}; S.enroll.forEach(r => { if (r.nombre) S.names[r.persona] = r.nombre; });
+  if (!S._defaultsSet) { applyDefaultFilters(); S._defaultsSet = true; }
+  updateHeaderDate();
+  clearTimeout(S._slowTimer);
+  if (!S._tracked) { S._tracked = true; trackPage(S.view); }
+  $('loading').classList.add('d-none');
+  if (S.view !== 'admin') renderAll();
+}
+function fetchData() {
+  google.script.run
+    .withSuccessHandler(json => useData(JSON.parse(json)))
+    .withFailureHandler(err => { $('loading').classList.remove('d-none'); $('loading').innerHTML = '<div style="color:var(--orange-text)">' + esc(t('loadError', { e: errText(err) })) + '</div>'; })
+    .getDashboardData();
+}
+
+(function init() {
+  LANG = detectLang();
+  makeFormatters();
+  applyTheme(getTheme());
+  applyStatic();
+  chartDefaults();
+  bindFilters();
+  bindEvents();
+  const slow = setTimeout(() => $('loadingSlow').classList.remove('d-none'), 8000);
+  S._slowTimer = slow;
+  fetchData();
+  if (IS_ADMIN) google.script.run.withSuccessHandler(renderAdmin).getPageData();
+})();
+</script>
+</body>
+</html>

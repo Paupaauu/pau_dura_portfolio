@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Training Analytics Dashboard — Pau Durà Pérez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../styles.css?v=10">
+</head>
+<body>
+
+<!-- NAV (same as the home page; links point back to its sections) -->
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a href="../index.html#home" class="logo">&lt;PauDurà<span class="accent">/</span>&gt;</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="../index.html#home">home</a>
+      <a href="../index.html#about">about</a>
+      <a href="../index.html#projects">projects</a>
+      <a href="../index.html#experience">experience</a>
+      <a href="../index.html#contact">contact</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- PROJECT HEADER -->
+<section class="page-header">
+  <div class="container">
+    <a href="../index.html#projects" class="back-link">&larr; Back to projects</a>
+    <p class="hero__pretitle">// projects / training_dashboard.gs</p>
+    <h1 class="page-header__title">Training Analytics Dashboard</h1>
+    <p class="page-header__intro">
+      End-to-end solution that turns the monthly exports of a corporate learning platform into a live,
+      interactive dashboard: automated loading into BigQuery, SQL cleaning and matching to the workforce
+      list, and a fast web app that replaced a Looker Studio report and refreshes with a single click.
+    </p>
+    <ul class="facts">
+      <li><b>~80k</b> module records</li>
+      <li><b>270</b> courses</li>
+      <li><b>2,800</b> people</li>
+      <li><b>1 click</b> to update</li>
+    </ul>
+    <p class="demo-note">The demo uses an anonymised sample of 15 courses and ~330 people: names, emails, IDs,
+      sites, clients, campaigns and course names are fictitious; durations, statuses and dates are real.</p>
+    <div class="tech-tags">
+      <span>Data Engineering</span><span>BigQuery &amp; SQL</span><span>Apps Script</span><span>Dashboard Design</span><span>Automation</span>
+    </div>
+    <div class="hero__cta">
+      <a href="training_liveDemo.html" class="btn btn--primary" target="_blank" rel="noopener">Open the dashboard</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section section--alt">
+  <div class="container">
+    <h2 class="section__title"><span class="tag">&lt;process&gt;</span></h2>
+    <p class="section__subtitle">// how the solution works, step by step</p>
+        <div class="steps">
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">1.</span> <span class="step__name">Automated data ingestion</span><span class="step__parens">()</span></h4>
+              <p>Monthly exports from the learning platform (CSV or Excel, each a full snapshot of the month) are dropped into a shared Drive folder. One click — or a nightly trigger — reads only new or changed files, loads them into BigQuery and keeps the most recent export for each month.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">2.</span> <span class="step__name">Cleaning and business rules in SQL</span><span class="step__parens">()</span></h4>
+              <p>Test courses are excluded, text is normalised, durations such as “1h 20m 5s” become minutes and percentages become ratios, mixed date formats are parsed and duplicates are removed. Every rule lives in versioned SQL, so the result is reproducible.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">3.</span> <span class="step__name">Matching to the workforce list</span><span class="step__parens">()</span></h4>
+              <p>Each enrolment is joined to the employee list by ID and course start date, using the record valid on that date (or the closest month). Unmatched rows are flagged instead of dropped, so data-quality gaps stay visible.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">4.</span> <span class="step__name">Fast snapshot for the dashboard</span><span class="step__parens">()</span></h4>
+              <p>At the end of each load the data is aggregated into a compact snapshot (dictionary-encoded, gzip-compressed and cached). Opening the dashboard never queries BigQuery: it loads in seconds and all filtering and charting happens in the browser.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">5.</span> <span class="step__name">Interactive dashboard</span><span class="step__parens">()</span></h4>
+              <p>Two views — Courses and Agents — with KPIs, enrolment status, planned vs actual hours by month, site and line of business, a course timeline and an agent file with module-level detail. Every chart is clickable and filters the whole dashboard.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">6.</span> <span class="step__name">Usability for every team</span><span class="step__parens">()</span></h4>
+              <p>Multi-select filters with search, CSV and PDF exports that respect the active filters, Spanish / English / Italian, light and dark themes, and privacy-safe usage analytics.</p>
+            </div>
+          </article>
+          <article class="step">
+            <div>
+              <h4 class="step__title"><span class="step__num">7.</span> <span class="step__name">Access control and notifications</span><span class="step__parens">()</span></h4>
+              <p>Who can view the dashboard, run updates or receive the load report is managed from a simple Google Sheet. Every load sends an email summary with the files processed and any warnings.</p>
+            </div>
+          </article>
+        </div>
+    <div class="page-footer-nav">
+      <a href="../index.html#projects" class="btn btn--small btn--ghost">&larr; Back to projects</a>
+      <a href="training_liveDemo.html" class="btn btn--small btn--primary" target="_blank" rel="noopener">Open the dashboard</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>&lt;/&gt; Designed and built by Pau Dura Pérez — © 2026</p>
+  </div>
+</footer>
+
+<script src="../script.js?v=10"></script>
+
+</body></html>
