@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="styles.css?v=10">
+<link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
 
@@ -16,13 +16,16 @@
   <div class="container navbar__inner">
     <a href="#home" class="logo">&lt;PauDurà<span class="accent">/</span>&gt;</a>
     <nav class="nav-links" id="navLinks">
-      <a href="#home">home</a>
-      <a href="#about">about</a>
-      <a href="#projects">projects</a>
-      <a href="#experience">experience</a>
-      <a href="#contact">contact</a>
+      <a href="#home" data-i18n="nav.home">home</a>
+      <a href="#about" data-i18n="nav.about">about</a>
+      <a href="#projects" data-i18n="nav.projects">projects</a>
+      <a href="#experience" data-i18n="nav.experience">experience</a>
+      <a href="#contact" data-i18n="nav.contact">contact</a>
     </nav>
-    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+    <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label">
+      <button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button><button type="button" data-lang="it">IT</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" data-i18n-attr="aria-label:a.menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -32,18 +35,18 @@
 <section id="home" class="hero">
   <div class="container hero__inner">
     <div class="hero__text">
-      <p class="hero__pretitle">// welcome to my portfolio</p>
+      <p class="hero__pretitle" data-i18n="hero.pretitle">// welcome to my portfolio</p>
       <h1 class="hero__title">Pau Durà Pérez</h1>
       <p class="hero__subtitle">
         <span class="typed" id="typedText"></span><span class="cursor">|</span>
       </p>
-      <p class="hero__description">
+      <p class="hero__description" data-i18n="hero.desc">
         Planning Manager &amp; Data Analyst. I turn raw data into clear decisions
         through analysis, planning and visualisation.
       </p>
       <div class="hero__cta">
-        <a href="#projects" class="btn btn--primary">View projects</a>
-        <a href="#contact" class="btn btn--ghost">Get in touch</a>
+        <a href="#projects" class="btn btn--primary" data-i18n="hero.cta1">View projects</a>
+        <a href="#contact" class="btn btn--ghost" data-i18n="hero.cta2">Get in touch</a>
       </div>
     </div>
 
@@ -64,11 +67,11 @@
         <span class="tok-var">self</span>.passion = <span class="tok-str">"data storytelling"</span>
 
     <span class="tok-key">def</span> <span class="tok-fn">say_hello</span>(<span class="tok-var">self</span>):
-        <span class="tok-key">return</span> <span class="tok-str">"Welcome to my portfolio!"</span></code></pre>
+        <span class="tok-key">return</span> <span class="tok-str" data-i18n="hero.hello">"Welcome to my portfolio!"</span></code></pre>
       </div>
     </div>
   </div>
-  <a href="#about" class="scroll-hint" aria-label="Scroll down">
+  <a href="#about" class="scroll-hint" aria-label="Scroll down" data-i18n-attr="aria-label:a.scroll">
     <span></span>
   </a>
 </section>
@@ -76,40 +79,40 @@
 <!-- ABOUT -->
 <section id="about" class="section">
   <div class="container">
-    <h2 class="section__title"><span class="tag">&lt;about-me&gt;</span></h2>
+    <h2 class="section__title"><span class="tag" data-i18n="about.title">&lt;about-me&gt;</span></h2>
 
     <div class="about__grid">
       <div class="about__avatar">
-        <img src="img/avatar.png?v=10" class="avatar-illustration" width="640" height="535"
-             alt="Illustration of Pau working on a laptop with a dog alongside, surrounded by charts, code and an AI robot">
+        <img src="img/avatar.png?v=12" class="avatar-illustration" width="640" height="535"
+             alt="Illustration of Pau working on a laptop with a dog alongside, surrounded by charts, code and an AI robot" data-i18n-attr="alt:a.avatar">
       </div>
 
       <div class="about__content">
-        <p>
+        <p data-i18n="about.p1">
           I'm <strong>Pau Dura Pérez</strong>, a specialist in <strong>Planning Management</strong> and
           <strong>data analysis</strong>. I'm passionate about everything to do with data: from
           gathering and cleaning it to turning it into <strong>clear visualisations</strong>
           that make decision-making easier.
         </p>
-        <p>
+        <p data-i18n="about.p2">
           I firmly believe a good dashboard is worth more than a thousand lines of report: if the data
           can be understood at a glance, decisions are made faster and better. That's why I combine
           strategic planning with analytical tools to turn uncertainty into
           concrete action plans.
         </p>
-        <p>
+        <p data-i18n="about.p3">
           When I'm not optimising a forecast or building a dashboard, you'll find me
           exploring new ways to tell stories with data.
         </p>
 
         <div class="skills">
-          <span class="skill-tag"><span class="skill-key">PowerBI</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">Looker Studio</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">Excel</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">PowerQuery</span>=<span class="skill-val">"advanced"</span></span>
-          <span class="skill-tag"><span class="skill-key">Python</span>=<span class="skill-val">"intermediate"</span></span>
-          <span class="skill-tag"><span class="skill-key">AI</span>=<span class="skill-val">"always learning it, always using it"</span></span>
-          <span class="skill-tag"><span class="skill-key">Forecasting</span>=<span class="skill-val">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">PowerBI</span>=<span class="skill-val" data-i18n="skill.advanced">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">Looker Studio</span>=<span class="skill-val" data-i18n="skill.advanced">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">Excel</span>=<span class="skill-val" data-i18n="skill.advanced">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">PowerQuery</span>=<span class="skill-val" data-i18n="skill.advanced">"advanced"</span></span>
+          <span class="skill-tag"><span class="skill-key">Python</span>=<span class="skill-val" data-i18n="skill.intermediate">"intermediate"</span></span>
+          <span class="skill-tag"><span class="skill-key">AI</span>=<span class="skill-val" data-i18n="skill.ai">"always learning it, always using it"</span></span>
+          <span class="skill-tag"><span class="skill-key">Forecasting</span>=<span class="skill-val" data-i18n="skill.advanced">"advanced"</span></span>
         </div>
       </div>
     </div>
@@ -119,8 +122,8 @@
 <!-- PROJECTS -->
 <section id="projects" class="section section--alt">
   <div class="container">
-    <h2 class="section__title"><span class="tag">&lt;projects&gt;</span></h2>
-    <p class="section__subtitle">// a selection of planning and data analysis projects</p>
+    <h2 class="section__title"><span class="tag" data-i18n="projects.title">&lt;projects&gt;</span></h2>
+    <p class="section__subtitle" data-i18n="projects.sub">// a selection of planning and data analysis projects</p>
 
     <div class="projects__grid">
 
@@ -130,21 +133,21 @@
           <span class="terminal__title">demand_forecast.py</span>
         </div>
         <div class="project-card__body">
-          <h3>Historical Data Analysis &amp; Forecasting</h3>
-          <p>
+          <h3 data-i18n="fc.title">Historical Data Analysis &amp; Forecasting</h3>
+          <p data-i18n="fc.desc">
             Assessment of historical data quality, identification of behavioural patterns and construction
             of fine-tuned forecasts, all organised into visual, interactive dashboards that make the results
             easy to interpret and support decision-making.
           </p>
-          <a href="projects/forecasting_liveDemo.html" class="project-card__preview" target="_blank" rel="noopener" aria-label="Open the forecasting dashboard">
-            <img src="projects/img/forecasting_preview.png" alt="Monthly history and forecast chart from the forecasting dashboard" width="838" height="250" loading="lazy">
+          <a href="projects/forecasting_liveDemo.html" class="project-card__preview" target="_blank" rel="noopener" aria-label="Open the forecasting dashboard" data-i18n-attr="aria-label:a.fcOpen">
+            <img src="projects/img/forecasting_preview.png" alt="Monthly history and forecast chart from the forecasting dashboard" width="838" height="250" loading="lazy" data-i18n-attr="alt:a.fcImg">
           </a>
           <div class="tech-tags">
-            <span>Data Analysis</span><span>Forecasting</span><span>Seasonality Analysis</span><span>AI-Assisted Analyst</span>
+            <span data-i18n="tag.dataAnalysis">Data Analysis</span><span>Forecasting</span><span data-i18n="tag.seasonality">Seasonality Analysis</span><span data-i18n="tag.aiAnalyst">AI-Assisted Analyst</span>
           </div>
           <div class="project-card__links">
-            <a href="projects/forecasting_liveDemo.html" class="btn btn--small btn--ghost" target="_blank" rel="noopener">Live demo</a>
-            <a href="projects/forecasting_moreDetails.html" class="btn btn--small btn--ghost">Details</a>
+            <a href="projects/forecasting_liveDemo.html" class="btn btn--small btn--ghost" target="_blank" rel="noopener" data-i18n="btn.demo">Live demo</a>
+            <a href="projects/forecasting_moreDetails.html" class="btn btn--small btn--ghost" data-i18n="btn.details">Details</a>
           </div>
         </div>
       </article>
@@ -155,21 +158,21 @@
           <span class="terminal__title">training_dashboard.gs</span>
         </div>
         <div class="project-card__body">
-          <h3>Training Analytics Dashboard</h3>
-          <p>
+          <h3 data-i18n="tr.title">Training Analytics Dashboard</h3>
+          <p data-i18n="tr.card">
             Automated pipeline and web dashboard for corporate training data: monthly LMS exports are loaded into
             BigQuery, cleaned and matched to the workforce list, then turned into an interactive, multilingual
             dashboard that replaced a Looker Studio report and updates with a single click.
           </p>
-          <a href="projects/training_liveDemo.html" class="project-card__preview" target="_blank" rel="noopener" aria-label="Open the training dashboard demo">
-            <img src="projects/img/training_preview.png?v=10" alt="Training dashboard with KPIs, enrolment status and hours by month" width="1280" height="705" loading="lazy">
+          <a href="projects/training_liveDemo.html" class="project-card__preview" target="_blank" rel="noopener" aria-label="Open the training dashboard demo" data-i18n-attr="aria-label:a.trOpen">
+            <img src="projects/img/training_preview.png?v=12" alt="Training dashboard with KPIs, enrolment status and hours by month" width="1280" height="705" loading="lazy" data-i18n-attr="alt:a.trImg">
           </a>
           <div class="tech-tags">
-            <span>Data Engineering</span><span>BigQuery &amp; SQL</span><span>Apps Script</span><span>Dashboard Design</span><span>Automation</span>
+            <span data-i18n="tag.dataEng">Data Engineering</span><span>BigQuery &amp; SQL</span><span>Apps Script</span><span data-i18n="tag.dashDesign">Dashboard Design</span><span data-i18n="tag.automation">Automation</span>
           </div>
           <div class="project-card__links">
-            <a href="projects/training_liveDemo.html" class="btn btn--small btn--ghost" target="_blank" rel="noopener">Live demo</a>
-            <a href="projects/training_moreDetails.html" class="btn btn--small btn--ghost">Details</a>
+            <a href="projects/training_liveDemo.html" class="btn btn--small btn--ghost" target="_blank" rel="noopener" data-i18n="btn.demo">Live demo</a>
+            <a href="projects/training_moreDetails.html" class="btn btn--small btn--ghost" data-i18n="btn.details">Details</a>
           </div>
         </div>
       </article>
@@ -181,19 +184,19 @@
 <!-- EXPERIENCE -->
 <section id="experience" class="section">
   <div class="container">
-    <h2 class="section__title"><span class="tag">&lt;experience&gt;</span></h2>
+    <h2 class="section__title"><span class="tag" data-i18n="exp.title">&lt;experience&gt;</span></h2>
 
     <div class="timeline">
 
       <div class="timeline__item">
         <div class="timeline__dot"></div>
         <div class="timeline__content">
-          <span class="timeline__date">2022 — present</span>
+          <span class="timeline__date" data-i18n="exp.present">2022 — present</span>
           <h3>Planning Manager <span class="at">@</span> NovaLogix Group</h3>
           <ul>
-            <li>Led the regional S&amp;OP process, coordinating sales, operations and finance.</li>
-            <li>Designed Power BI dashboards that cut reporting time by 40%.</li>
-            <li>Implemented forecasting models that improved demand accuracy by 18%.</li>
+            <li data-i18n="exp.1a">Led the regional S&amp;OP process, coordinating sales, operations and finance.</li>
+            <li data-i18n="exp.1b">Designed Power BI dashboards that cut reporting time by 40%.</li>
+            <li data-i18n="exp.1c">Implemented forecasting models that improved demand accuracy by 18%.</li>
           </ul>
         </div>
       </div>
@@ -204,9 +207,9 @@
           <span class="timeline__date">2019 — 2022</span>
           <h3>Data Analyst <span class="at">@</span> Vertex Retail Solutions</h3>
           <ul>
-            <li>Built ETL pipelines in Python and SQL to consolidate data from more than 50 shops.</li>
-            <li>Developed Tableau visualisations to track commercial KPIs.</li>
-            <li>Automated recurring reports, saving the team more than 10 hours a week.</li>
+            <li data-i18n="exp.2a">Built ETL pipelines in Python and SQL to consolidate data from more than 50 shops.</li>
+            <li data-i18n="exp.2b">Developed Tableau visualisations to track commercial KPIs.</li>
+            <li data-i18n="exp.2c">Automated recurring reports, saving the team more than 10 hours a week.</li>
           </ul>
         </div>
       </div>
@@ -217,9 +220,9 @@
           <span class="timeline__date">2017 — 2019</span>
           <h3>Junior Business Analyst <span class="at">@</span> BrightPath Consulting</h3>
           <ul>
-            <li>Supported client data analysis for strategy consulting projects.</li>
-            <li>Created advanced Excel reports and the first versions of Power BI dashboards.</li>
-            <li>Helped define KPIs for tracking internal projects.</li>
+            <li data-i18n="exp.3a">Supported client data analysis for strategy consulting projects.</li>
+            <li data-i18n="exp.3b">Created advanced Excel reports and the first versions of Power BI dashboards.</li>
+            <li data-i18n="exp.3c">Helped define KPIs for tracking internal projects.</li>
           </ul>
         </div>
       </div>
@@ -238,9 +241,9 @@
       </div>
       <div class="hire__body">
         <p class="hire__prompt"><span class="tok-key">&gt;&gt;&gt;</span> <span class="tok-fn">input</span>(<span class="tok-str">"…"</span>)</p>
-        <h2 class="hire__title">Do you want to hire me?</h2>
+        <h2 class="hire__title" data-i18n="hire.title">Do you want to hire me?</h2>
         <div class="hire__arena" id="hireArena">
-          <a href="#contact" class="btn btn--primary hire__yes" id="hireYes">Yes</a>
+          <a href="#contact" class="btn btn--primary hire__yes" id="hireYes" data-i18n="hire.yes">Yes</a>
           <button type="button" class="btn btn--ghost hire__no" id="hireNo">No</button>
         </div>
         <p class="hire__counter" id="hireCounter" aria-live="polite"></p>
@@ -253,8 +256,8 @@
 <section id="contact" class="section section--alt">
   <div class="container contact__inner">
     <div class="contact__info">
-      <h2 class="section__title"><span class="tag">&lt;contact-me&gt;</span></h2>
-      <p>
+      <h2 class="section__title"><span class="tag" data-i18n="contact.title">&lt;contact-me&gt;</span></h2>
+      <p data-i18n="contact.text">
         Have a planning or data analysis project in mind, or would you like to know
         more about me and how I could fit into your team? Drop me a line and
         I'll get back to you as soon as possible.
@@ -265,34 +268,34 @@
           <a href="mailto:pauduraperez@gmail.com">pauduraperez@gmail.com</a>
         </li>
         <li>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 21a2 2 0 0 0 1-1.72V16a2 2 0 0 0-2-2h-.09a16 16 0 0 1-6.16-1.9 16 16 0 0 1-5-5A16 16 0 0 1 6.7 4.2 2 2 0 0 0 4.72 2H2a2 2 0 0 0-2 2c0 9.94 8.06 18 18 18a1.68 1.68 0 0 0 .84-.14z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <a href="tel:+34697631938">+34 697 631 938</a>
         </li>
         <li>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>Valencia, Spain · Working remotely</span>
+          <span data-i18n="contact.location">Valencia, Spain · Working remotely</span>
         </li>
       </ul>
     </div>
 
     <form id="contactForm" class="contact__form">
       <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" placeholder="Your name" required>
+        <label for="name" data-i18n="form.name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required data-i18n-attr="placeholder:p.name">
       </div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@email.com" required>
+        <input type="email" id="email" name="email" placeholder="you@email.com" required data-i18n-attr="placeholder:p.email">
       </div>
       <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" name="subject" placeholder="How can I help?" required>
+        <label for="subject" data-i18n="form.subject">Subject</label>
+        <input type="text" id="subject" name="subject" placeholder="How can I help?" required data-i18n-attr="placeholder:p.subject">
       </div>
       <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" placeholder="Write your message..." required></textarea>
+        <label for="message" data-i18n="form.message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="Write your message..." required data-i18n-attr="placeholder:p.message"></textarea>
       </div>
-      <button type="submit" class="btn btn--primary" id="submitBtn">Send message</button>
+      <button type="submit" class="btn btn--primary" id="submitBtn" data-i18n="form.send">Send message</button>
       <p class="form-status" id="formStatus"></p>
     </form>
   </div>
@@ -300,10 +303,11 @@
 
 <footer class="footer">
   <div class="container">
-    <p>&lt;/&gt; Designed and built by Pau Dura Pérez — © 2026</p>
+    <p data-i18n="footer">&lt;/&gt; Designed and built by Pau Dura Pérez — © 2026</p>
   </div>
 </footer>
 
-<script src="script.js?v=10"></script>
+<script src="i18n.js?v=12"></script>
+<script src="script.js?v=12"></script>
 
 </body></html>

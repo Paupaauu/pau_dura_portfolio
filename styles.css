@@ -123,11 +123,34 @@ img { max-width: 100%; display: block; }
 .nav-links {
   display: flex;
   gap: 28px;
+  margin-left: auto; /* menu sits on the right, next to the language switcher */
   font-family: var(--font-mono);
   font-size: 0.9rem;
 }
 .nav-links a { color: var(--text-dim); transition: color 0.15s; }
 .nav-links a:hover { color: var(--accent-blue); }
+
+.lang-switch {
+  display: flex;
+  margin-left: 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.lang-switch button {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 9px;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.lang-switch button + button { border-left: 1px solid var(--border); }
+.lang-switch button:hover { color: var(--accent-blue); }
+.lang-switch button[aria-pressed="true"] { background: var(--accent-blue); color: #061019; }
 
 .nav-toggle {
   display: none;
@@ -283,7 +306,8 @@ img { max-width: 100%; display: block; }
    Sections (generic)
    ========================================================================== */
 .section { padding: 100px 0; }
-.section--alt { background: var(--bg-alt); }
+/* Alternate sections keep the page's grid background (no solid fill) */
+.section--alt { background: transparent; }
 
 .section__title {
   font-family: var(--font-mono);
@@ -682,6 +706,7 @@ img { max-width: 100%; display: block; }
   }
   .nav-links.open { display: flex; }
   .nav-toggle { display: flex; }
+  .lang-switch { margin-left: auto; margin-right: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

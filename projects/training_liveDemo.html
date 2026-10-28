@@ -641,7 +641,7 @@ const t = (key, p) => {
   return s;
 };
 function detectLang() {
-  try { const saved = localStorage.getItem('training_demo_lang'); if (saved && I18N[saved]) return saved; } catch (e) {}
+  try { const saved = localStorage.getItem('portfolio_lang'); if (saved && I18N[saved]) return saved; } catch (e) {}
   const nav = (navigator.language || 'es').slice(0, 2).toLowerCase();
   return I18N[nav] ? nav : 'es';
 }
@@ -677,7 +677,7 @@ function toggleTheme() {
 
 function setLang(l) {
   LANG = I18N[l] ? l : 'es';
-  try { localStorage.setItem('training_demo_lang', LANG); } catch (e) {}
+  try { localStorage.setItem('portfolio_lang', LANG); } catch (e) {}
   track('change_language', { language: LANG });
   makeFormatters();
   applyStatic();

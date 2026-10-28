@@ -1,6 +1,35 @@
 // Shared behaviour for every page of the portfolio.
 // Each block only runs if its elements exist on the current page.
 
+// Language (EN / ES / IT). Texts live in i18n.js; English is also the HTML default.
+// The choice is shared by every page of the site, including the project demos.
+const LANGS = ["en", "es", "it"];
+const LANG_KEY = "portfolio_lang";
+let LANG = (() => {
+  try { const saved = localStorage.getItem(LANG_KEY); if (LANGS.includes(saved)) return saved; } catch (e) {}
+  const browser = (navigator.language || "en").slice(0, 2).toLowerCase();
+  return LANGS.includes(browser) ? browser : "en";
+})();
+const t = (key, vars) => {
+  const dict = window.I18N || {};
+  let v = (dict[LANG] && dict[LANG][key]) ?? (dict.en && dict.en[key]) ?? key;
+  if (vars && typeof v === "string") Object.keys(vars).forEach((k) => { v = v.replace("{" + k + "}", vars[k]); });
+  return v;
+};
+const applyLang = (lang) => {
+  LANG = lang;
+  try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+  document.documentElement.lang = { en: "en-GB", es: "es", it: "it" }[lang];
+  document.querySelectorAll("[data-i18n]").forEach((el) => { el.innerHTML = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
+    el.dataset.i18nAttr.split(",").forEach((pair) => { const [attr, key] = pair.split(":"); el.setAttribute(attr, t(key)); });
+  });
+  document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false"));
+  document.dispatchEvent(new CustomEvent("langchange"));
+};
+document.querySelectorAll("[data-lang]").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+if (window.I18N) applyLang(LANG);
+
 // Mobile nav toggle
 const navToggle = document.getElementById("navToggle");
 const navLinks = document.getElementById("navLinks");
@@ -14,10 +43,11 @@ if (navToggle && navLinks) {
 // Hero typing animation (home page)
 const typedEl = document.getElementById("typedText");
 if (typedEl) {
-  const phrases = ["Planning Manager", "Data Analyst", "Data Storyteller", "Forecast Enthusiast"];
   let phraseIndex = 0, charIndex = 0, deleting = false;
   const typeLoop = () => {
-    const current = phrases[phraseIndex];
+    const phrases = t("typed");
+    const current = phrases[phraseIndex % phrases.length];
+    charIndex = Math.min(charIndex, current.length);
     if (!deleting) {
       charIndex++;
       typedEl.textContent = current.slice(0, charIndex);
@@ -25,7 +55,7 @@ if (typedEl) {
     } else {
       charIndex--;
       typedEl.textContent = current.slice(0, charIndex);
-      if (charIndex === 0) { deleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
+      if (charIndex === 0) { deleting = false; phraseIndex = (phraseIndex + 1) % t("typed").length; }
     }
     setTimeout(typeLoop, deleting ? 40 : 80);
   };
@@ -56,11 +86,6 @@ const hireYes = document.getElementById("hireYes");
 const hireNo = document.getElementById("hireNo");
 const hireCounter = document.getElementById("hireCounter");
 if (hireArena && hireYes && hireNo) {
-  const phrases = [
-    "No", "No", "Are you sure?", "Come on... think about it...", "Sure? Sure?",
-    "Really?", "I make great dashboards...", "Wrong button!", "Look, the other one is bigger",
-    "My forecast says you'll click Yes", "Last chance...",
-  ];
   const giveUpAt = 14; // after this many tries the No button surrenders
   let attempts = 0;
 
@@ -88,16 +113,25 @@ if (hireArena && hireYes && hireNo) {
     void hireNo.offsetWidth; // apply the starting point so the jump animates from there
   };
 
+  // Texts of the No button and the counter for the current attempt and language
+  const renderHireTexts = () => {
+    const phrases = t("hire.phrases");
+    if (attempts >= giveUpAt) {
+      hireNo.textContent = t("hire.giveUp");
+      hireCounter.textContent = t("hire.knew");
+    } else {
+      hireNo.textContent = phrases[Math.min(attempts, phrases.length - 1)];
+      hireCounter.textContent = attempts ? t("hire.count", { n: attempts }) : "";
+    }
+  };
+  document.addEventListener("langchange", renderHireTexts);
+  renderHireTexts();
+
   const dodge = () => {
     attempts++;
     detachNo();
-    if (attempts >= giveUpAt) {
-      hireNo.textContent = "Fine... Yes!";
-      hireCounter.textContent = "// I knew you'd come round";
-      return;
-    }
-    hireNo.textContent = phrases[Math.min(attempts, phrases.length - 1)];
-    hireCounter.textContent = `// attempts to say no: ${attempts}`;
+    renderHireTexts();
+    if (attempts >= giveUpAt) return;
 
     // Pick a random spot inside the arena that does not cover the Yes button
     const arenaW = hireArena.clientWidth, arenaH = hireArena.clientHeight;
@@ -138,7 +172,8 @@ const formStatus = document.getElementById("formStatus");
 if (contactForm && formStatus) {
   contactForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    formStatus.textContent = "This is only a preview — the live site sends messages via EmailJS.";
+    formStatus.textContent = t("form.preview");
     formStatus.className = "form-status sending";
   });
+  document.addEventListener("langchange", () => { if (formStatus.textContent) formStatus.textContent = t("form.preview"); });
 }
